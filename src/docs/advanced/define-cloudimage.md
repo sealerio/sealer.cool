@@ -179,7 +179,7 @@ sealer login registry.com -u username -p password
 
 Another dependent scenario, the kubernetes node is proxies to the private registry through the built-in registry of
 sealer and the private registry needs to be authenticated, it can be configured through the custom registry config.Refer
-to [registry config](../../../../design/docker-image-cache.md)
+to [registry config](https://github.com/sealerio/sealer/tree/main/docs/design/docker-image-cache.md)
 
 You can customize the registry configuration by defining Kubefile:
 
