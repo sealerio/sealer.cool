@@ -70,7 +70,7 @@ Copy the executable binary "helm" to the system $PATH.
 
 Copy remote web file or git repository to cloud image.
 
-`COPY https://github.com/sealerio/sealer/raw/main/applications/cassandra/cassandra-manifest.yaml manifests`
+`COPY https://github.com/sealerio/applications/raw/main/cassandra/cassandra-manifest.yaml manifests`
 
 Support wildcard copy, copy all yaml files in the test directory to rootfs manifests directory.
 
@@ -80,7 +80,7 @@ Support wildcard copy, copy all yaml files in the test directory to rootfs manif
 
 ARG: Supports setting command line parameters in the build phase for use with CMD and RUN instruction.
 
-> instruction format: ARG <parameter name>[=<default value>]
+> instruction format: ARG parameter_name=default_value
 
 Examples:
 
