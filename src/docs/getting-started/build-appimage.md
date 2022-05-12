@@ -13,11 +13,14 @@ install applications to an already existing Kubernetes cluster.
 just add argument "--base=false", will build an application image. and the size of application image depends on the
 docker image size in most cases. without rootfs,it will become slimmer.
 
-For example to build a prometheus application image:
+For example, build a prometheus application
+image,chose `registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8` as example base image,You can also choose
+other basic images according to your needs.
+
 Kubefile:
 
 ```shell
-FROM registry.cn-qingdao.aliyuncs.com/sealer-apps/openebs-localpv:2.11.0
+FROM registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8
 COPY prometheus manifests
 CMD kubectl apply -f prometheus/crd.yaml
 CMD kubectl apply -f prometheus/operator.yaml
