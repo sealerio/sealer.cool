@@ -16,7 +16,7 @@ The Apply Engine Using Clusterfile to init a cluster which contains kubernetes a
 ### Builders
 
 * Lite Builder, sealer will check all the manifest or helm chart, decode docker images in those files, and cache them into CloudImage.
-* Cloud Builder, sealer will create a Cluster using public cloud, and exec `RUN & CMD` command witch defined in Kubefile, then cache all the docker image in the Cluster.
+* Cloud Builder, sealer will create a Cluster using public cloud, and exec `RUN & CMD` command which defined in Kubefile, then cache all the docker image in the Cluster.
 * Container Builder, Using Docker container as a node, run kubernetes cluster in container then cache all the docker images.
 
 ## Apply Engine
