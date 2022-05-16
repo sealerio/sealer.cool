@@ -355,16 +355,24 @@ COPY imageList manifests
 
 ## Base image list
 
-### base image with sealer docker
+### base image without network plugin
 
-|image name |platform| kubernetes version|docker version|
---- | --- | ---| ---|
-|kubernetes:v1.19.8|AMD| 1.19.8|19.03.14|
-|kubernetes-arm64:v1.19.7|ARM| 1.19.7|19.03.14|
+platform of base CloudImage support both amd64 and arm64.
+
+|image name | kubernetes version|docker version|
+--- |  ---| ---|
+|kubernetes:v1.19.8-alpine|1.19.8|19.03.14|
+
+### base image with sealer docker and calico
+
+platform of base CloudImage support both amd64 and arm64.
+
+|image name | kubernetes version|docker version|
+--- |  ---| ---|
+|kubernetes:v1.19.8| 1.19.8|19.03.14|
 
 ### base image with native docker
 
 |image name |platform| kubernetes version|docker version|
 --- | --- | ---| ---|
 |kubernetes-kyverno:v1.19.8|AMD| 1.19.8|19.03.15|
-|kubernetes-kyverno-arm64:v1.19.7|ARM| 1.19.7|19.03.15|
