@@ -224,8 +224,9 @@ Plugin configuration shell.yaml:
 apiVersion: sealer.aliyun.com/v1alpha1
 kind: Plugin
 metadata:
-  name: SHELL
+  name: install-iscsi
 spec:
+  type: SHELL
   action: PostInstall
   data: |
     if type yum >/dev/null 2>&1;then

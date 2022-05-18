@@ -76,8 +76,9 @@ spec:
 apiVersion: sealer.aliyun.com/v1alpha1
 kind: Plugin
 metadata:
-  name: SHELL
+  name: iscsi-install
 spec:
+  type: SHELL
   action: PostInstall
   on: role=node
   data: |
