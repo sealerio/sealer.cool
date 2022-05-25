@@ -98,7 +98,7 @@ rendered.
 ### Env render file content syntax introduction
 
 sealer use Golang’s templating language to automatic escape the data defined at `html/template`. To access the data in a
-template the top most variable is access by "{{.}}". The dot inside the curly braces is called the pipeline and the root
+template the top most variable is access by curly braces. The dot inside the curly braces is called the pipeline and the root
 element of the data. also support control structures like defines an `if-Statement`,`Loops`.
 
 support [sprig](http://masterminds.github.io/sprig/) template functions.
