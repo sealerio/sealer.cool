@@ -98,7 +98,7 @@ rendered.
 ### Env render file content syntax introduction
 
 sealer use Golang’s templating language to automatic escape the data defined at `html/template`. To access the data in a
-template the top most variable is access by `{{.}}`. The dot inside the curly braces is called the pipeline and the root
+template the top most variable is access by "{{.}}". The dot inside the curly braces is called the pipeline and the root
 element of the data. also support control structures like defines an `if-Statement`,`Loops`.
 
 support [sprig](http://masterminds.github.io/sprig/) template functions.
@@ -129,8 +129,9 @@ spec:
       roles: [ node ]
 ```
 
+myscript.sh:
+
 ```shell script
-cat myscript.sh
 #!/bin/bash
 echo $docker_dir
 ```
@@ -161,8 +162,8 @@ kubernetesVersion: v1.19.8
 controlPlaneEndpoint: "apiserver.cluster.local:6443"
 imageRepository: sea.hub:5000/library
 networking:
-  podSubnet: { { .PodCIDR } }
-  serviceSubnet: { { .SvcCIDR } }
+  podSubnet: {{ .PodCIDR }}
+  serviceSubnet: {{ .SvcCIDR }}
 ```
 
 build with the tmpl file as a new ClusterImage.
@@ -194,7 +195,7 @@ spec:
       passwd: password123
       port: "22"
       user: root
-  image: kubernetes:v1.19.8 
+  image: kubernetes:v1.19.8
 ```
 
 run sealer will render the .tmpl file and create a new file named `kubeadm.yml`,and will use the new one to init the
@@ -233,7 +234,7 @@ metadata:
 spec:
   ports:
     - port: 443
-      targetPort: { { .DashBoardPort } }
+      targetPort: {{ .DashBoardPort }}
   selector:
     k8s-app: kubernetes-dashboard
 ...
