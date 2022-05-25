@@ -87,8 +87,9 @@ For example, if we use jiva engine as storage backend :
 apiVersion: sealer.aliyun.com/v1alpha1
 kind: Plugin
 metadata:
-  name: SHELL
+  name: install-iscsi
 spec:
+  type: SHELL
   action: PostInstall
   on: role=node
   data: |

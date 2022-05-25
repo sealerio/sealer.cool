@@ -9,7 +9,7 @@ tar zxvf sealer-v0.8.5-linux-amd64.tar.gz && mv sealer /usr/bin
 # run a kubernetes cluster
 sealer run kubernetes:v1.19.8 \
   --masters 192.168.0.2,192.168.0.3,192.168.0.4 \
-  --node 192.168.0.5,192.168.0.6,192.168.0.7 --passwd xxx
+  --nodes 192.168.0.5,192.168.0.6,192.168.0.7 --passwd xxx
 ```
 
 ```shell script
