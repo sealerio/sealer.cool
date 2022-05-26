@@ -81,7 +81,278 @@ spec:
       roles: [ node ]
 ```
 
-### How to define your own kubeadm config
+## Env render support
+
+### The Scope of Env render
+
+1. set ENV when execute shell command.
+2. render Env in file content of CloudImage
+
+special directory at rootfs will be rendered,that's means ,each file in above dir named with extension "tmpl",will be
+rendered.
+
+1. "${Rootfs}/etc"
+2. "${Rootfs}/charts"
+3. "${Rootfs}/manifests"
+
+### Env render file content syntax introduction
+
+sealer use Golang’s templating language to automatic escape the data defined at `html/template`. To access the data in a
+template the top most variable is access by curly braces. The dot inside the curly braces is called the pipeline and the root
+element of the data. also support control structures like defines an `if-Statement`,`Loops`.
+
+support [sprig](http://masterminds.github.io/sprig/) template functions.
+
+### User cases of Env
+
+#### Using ENV in executing shell script
+
+example : write ENV "docker_dir=/data/docker" at Clusterfile
+
+```yaml
+apiVersion: sealer.cloud/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  image: kubernetes:v1.19.8
+  env:
+    - docker_dir=/var/lib/docker
+    - ips=192.168.0.1;192.168.0.2;192.168.0.3 #ips=[192.168.0.1 192.168.0.2 192.168.0.3]
+  hosts:
+    - ips: [ 192.168.0.2 ]
+      roles: [ master ] # add role field to specify the node role
+      env: # overwrite some nodes has different env config, arrays are separated by semicolons
+        - docker_dir=/data/docker
+        - ips=192.168.0.2;192.168.0.3
+    - ips: [ 192.168.0.3 ]
+      roles: [ node ]
+```
+
+myscript.sh:
+
+```shell script
+#!/bin/bash
+echo $docker_dir
+```
+
+Kubefile:
+
+```shell
+FROM kubernetes:v1.19.8
+COPY myscript.sh scripts
+CMD bash scripts/myscript.sh
+```
+
+When sealer run the script will set ENV like this: `docker_dir=/data/docker && sh init.sh`
+In this case, master ENV is `/data/docker`, node ENV is by default `/var/lib/docker`
+
+#### Using ENV in rootfs file content
+
+##### customize file content under etc dir
+
+if you want to customize kubeadm config like "podSubnet" and "serviceSubnet" using env render.
+
+kubeadm.yml.tmpl:
+
+```yaml
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: v1.19.8
+controlPlaneEndpoint: "apiserver.cluster.local:6443"
+imageRepository: sea.hub:5000/library
+networking:
+  podSubnet: {{ .PodCIDR }}
+  serviceSubnet: {{ .SvcCIDR }}
+```
+
+build with the tmpl file as a new ClusterImage.
+
+Kubefile:
+
+```yaml
+FROM kubernetes:v1.19.8
+COPY kubeadm.yml.tmpl etc
+```
+
+use env at Clusterfile to render its value, and will set "PodCIDR=172.24.0.0/24","SvcCIDR=10.96.0.0/16" at kubeadm.yml.
+
+```yaml
+apiVersion: sealer.cloud/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  env:
+    - PodCIDR=100.64.0.0/10
+    - SvcCIDR=10.96.0.0/16
+  hosts:
+    ips:
+      - 172.16.0.197
+    roles:
+      - master
+    ssh:
+      passwd: password123
+      port: "22"
+      user: root
+  image: kubernetes:v1.19.8
+```
+
+run sealer will render the .tmpl file and create a new file named `kubeadm.yml`,and will use the new one to init the
+cluster.
+
+show partly result of the kubeadm.yml
+
+```yaml
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: v1.19.8
+controlPlaneEndpoint: "apiserver.cluster.local:6443"
+imageRepository: sea.hub:5000/library
+networking:
+  podSubnet: 100.64.0.0/10
+  serviceSubnet: 10.96.0.0/22
+```
+
+##### customize file content under manifests dir
+
+if you want to customize some business deployment at manifests dir.
+
+for example, customize kubernetes dashboard service target port use env.
+
+dashboard.yaml.tmpl:
+
+```yaml
+...
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  ports:
+    - port: 443
+      targetPort: {{ .DashBoardPort }}
+  selector:
+    k8s-app: kubernetes-dashboard
+...
+```
+
+To write kubefile, you need to copy yaml to the "manifests" directory at this time, sealer only renders the files in
+this directory:
+
+sealer will render the .tmpl file and create a new file named `dashboard.yaml`
+
+```yaml
+FROM kubernetes:1.16.9
+COPY dashobard.yaml.tmpl manifests/ # only support render template files in `manifests etc charts` dirs
+CMD kubectl apply -f manifests/dashobard.yaml
+```
+
+For users, they only need to specify the cluster environment variables:
+
+```shell script
+sealer run -e DashBoardPort=8443 mydashboard:latest -m xxx -n xxx -p xxx
+```
+
+Or set env in Clusterfile
+
+```yaml
+apiVersion: sealer.cloud/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  image: mydashobard:latest
+  env:
+    - DashBoardPort=8443
+  hosts:
+    - ips: [ 192.168.0.2 ]
+      roles: [ master ] # add role field to specify the node role
+    - ips: [ 192.168.0.3 ]
+      roles: [ node ]
+```
+
+#### Using ENV in Clusterfile section
+
+```shell
+apiVersion: sealer.cloud/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  image: kubernetes:v1.19.8
+  env:
+    - podcidr=100.64.0.0/10
+ ...
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: v1.19.8
+controlPlaneEndpoint: "apiserver.cluster.local:6443"
+imageRepository: sea.hub:5000/library
+networking:
+  # dnsDomain: cluster.local
+  podSubnet: {{ .podcidr }}
+  serviceSubnet: 10.96.0.0/22
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Config
+metadata:
+  name: calico
+spec:
+  path: etc/custom-resources.yaml
+  data: |
+    apiVersion: operator.tigera.io/v1
+    kind: Installation
+    metadata:
+      name: default
+    spec:
+      # Configures Calico networking.
+      calicoNetwork:
+        # Note: The ipPools section cannot be modified post-install.
+        ipPools:
+        - blockSize: 26
+          # Note: Must be the same as podCIDR
+          cidr: {{ .podcidr }}
+```
+
+Replace `podcidr` in kubeadm and Calico configurations with `podcidr` in Env in Clusterfile.
+
+## Overwrite CMD support
+
+This case show you how to use `cmd` fields of Clusterfile to overwrite cloud image startup.
+
+Kubefile:
+
+```shell
+FROM kubernetes:v1.19.8
+CMD [kubectl apply -f mysql, kubectl apply -f redis, kubectl apply -f saas]
+```
+
+If user wants to overwrite the default startup ,they only need to specify the `cmd` fields of Clusterfile.In this
+case,will only start `kubectl apply -f redis` and `kubectl apply -f saas`.
+
+```yaml
+apiVersion: sealer.cloud/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  image: myapp:latest
+  cmd:
+    - kubectl apply -f redis
+    - kubectl apply -f saas
+  hosts:
+    - ips: [ 192.168.0.2 ]
+      roles: [ master ] # add role field to specify the node role
+    - ips: [ 192.168.0.3 ]
+      roles: [ node ]
+```
+
+## Using Clusterfile to define your own kubeadm config
 
 The better way is to add kubeadm config directly into Clusterfile, of course every CloudImage has it default config:
 You can only define part of those configs, sealer will merge then into default config.
@@ -283,175 +554,4 @@ authentication:
 ```shell
 # Initialize the cluster using custom kubeadm
 sealer apply -f Clusterfile
-```
-
-### Using ENV in configs and script
-
-Using ENV in configs or yaml files
-
-```yaml
-apiVersion: sealer.cloud/v2
-kind: Cluster
-metadata:
-  name: my-cluster
-spec:
-  image: kubernetes:v1.19.8
-  env:
-    - docker_dir=/var/lib/docker
-    - ips=192.168.0.1;192.168.0.2;192.168.0.3 #ips=[192.168.0.1 192.168.0.2 192.168.0.3]
-  hosts:
-    - ips: [ 192.168.0.2 ]
-      roles: [ master ] # add role field to specify the node role
-      env: # overwrite some nodes has different env config, arrays are separated by semicolons
-        - docker_dir=/data/docker
-        - ips=192.168.0.2;192.168.0.3
-    - ips: [ 192.168.0.3 ]
-      roles: [ node ]
-```
-
-Using ENV in init.sh script:
-
-```shell script
-#!/bin/bash
-echo $docker_dir
-```
-
-When sealer run the script will set ENV like this: `docker_dir=/data/docker && sh init.sh`
-In this case, master ENV is `/data/docker`, node ENV is by default `/var/lib/docker`
-
-### Env render support
-
-support [sprig](http://masterminds.github.io/sprig/) template functions.
-This case show you how to use env to set dashboard service target port
-
-dashboard.yaml.tmpl:
-
-```yaml
-...
-kind: Service
-apiVersion: v1
-metadata:
-  labels:
-    k8s-app: kubernetes-dashboard
-  name: kubernetes-dashboard
-  namespace: kubernetes-dashboard
-spec:
-  ports:
-    - port: 443
-      targetPort: {{ .DashBoardPort }}
-  selector:
-    k8s-app: kubernetes-dashboard
-...
-```
-
-To write kubefile, you need to copy yaml to the "manifests" directory at this time, sealer only renders the files in
-this directory:
-
-sealer will render the .tmpl file and create a new file named `dashboard.yaml`
-
-```yaml
-FROM kubernetes:1.16.9
-COPY dashobard.yaml.tmpl manifests/ # only support render template files in `manifests etc charts` dirs
-CMD kubectl apply -f manifests/dashobard.yaml
-```
-
-For users, they only need to specify the cluster environment variables:
-
-```shell script
-sealer run -e DashBoardPort=8443 mydashboard:latest -m xxx -n xxx -p xxx
-```
-
-Or set env in Clusterfile
-
-```yaml
-apiVersion: sealer.cloud/v2
-kind: Cluster
-metadata:
-  name: my-cluster
-spec:
-  image: mydashobard:latest
-  env:
-    - DashBoardPort=8443
-  hosts:
-    - ips: [ 192.168.0.2 ]
-      roles: [ master ] # add role field to specify the node role
-    - ips: [ 192.168.0.3 ]
-      roles: [ node ]
-```
-
-### Render env in Clusterfile
-
-```shell
-apiVersion: sealer.cloud/v2
-kind: Cluster
-metadata:
-  name: my-cluster
-spec:
-  image: kubernetes:v1.19.8
-  env:
-    - podcidr=100.64.0.0/10
- ...
----
-apiVersion: kubeadm.k8s.io/v1beta2
-kind: ClusterConfiguration
-kubernetesVersion: v1.19.8
-controlPlaneEndpoint: "apiserver.cluster.local:6443"
-imageRepository: sea.hub:5000/library
-networking:
-  # dnsDomain: cluster.local
-  podSubnet: {{ .podcidr }}
-  serviceSubnet: 10.96.0.0/22
----
-apiVersion: sealer.aliyun.com/v1alpha1
-kind: Config
-metadata:
-  name: calico
-spec:
-  path: etc/custom-resources.yaml
-  data: |
-    apiVersion: operator.tigera.io/v1
-    kind: Installation
-    metadata:
-      name: default
-    spec:
-      # Configures Calico networking.
-      calicoNetwork:
-        # Note: The ipPools section cannot be modified post-install.
-        ipPools:
-        - blockSize: 26
-          # Note: Must be the same as podCIDR
-          cidr: {{ .podcidr }}
-```
-
-Replace `podcidr` in kubeadm and Calico configurations with `podcidr` in Env in Clusterfile.
-
-### Overwrite CMD support
-
-This case show you how to use `cmd` fields of Clusterfile to overwrite cloud image startup.
-
-Kubefile:
-
-```shell
-FROM kubernetes:v1.19.8
-CMD [kubectl apply -f mysql, kubectl apply -f redis, kubectl apply -f saas]
-```
-
-If user wants to overwrite the default startup ,they only need to specify the `cmd` fields of Clusterfile.In this
-case,will only start `kubectl apply -f redis` and `kubectl apply -f saas`.
-
-```yaml
-apiVersion: sealer.cloud/v2
-kind: Cluster
-metadata:
-  name: my-cluster
-spec:
-  image: myapp:latest
-  cmd:
-    - kubectl apply -f redis
-    - kubectl apply -f saas
-  hosts:
-    - ips: [ 192.168.0.2 ]
-      roles: [ master ] # add role field to specify the node role
-    - ips: [ 192.168.0.3 ]
-      roles: [ node ]
 ```
