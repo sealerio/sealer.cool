@@ -423,3 +423,10 @@ spec:
 ::: v-pre
 kubeadm和calico配置中的`{{ .podcidr }}`将被替换为Clusterfile.Env中的`podcidr`。
 :::
+
+## apply 变更规则
+
+- image 字段变更会检测当前集群与镜像中k8s版本是否一致，如果不一致会执行 update操作
+- 基础镜像的上层业务“CMD”指令在apply的时候会再次执行，业务配置会重新渲染，但是kubeadm配置不会重新渲染。
+- env 环境变量是否变更有效取决到渲染的目标文件，比如如果渲染到kubeadm配置中在不触发升级操作时就不会变更生效，渲染到业务yaml文件或者helm values中时，因为apply会重新执行CMD，会生效。
+- iplist 变更重新apply会执行增加/删除节点的操作，会与实际集群ip列表比对，发现不一致决定增加还是删除节点。
