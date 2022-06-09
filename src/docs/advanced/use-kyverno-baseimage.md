@@ -8,7 +8,7 @@ It's common that some k8s clusters have their own private image registry, and th
 
 ### How to use it
 
-We provide an official BaseImage which integrates kyverno into cluster:`kubernetes-kyverno:v1.19.8`. Note that it contains no docker images other than those necessary to run a k8s cluster, so if you want to use this cloud image, and you also need other docker images(such as `nginx`) to run a container, you need to cache the docker images to your private registry.
+We provide an official BaseImage which integrates kyverno into cluster:`kubernetes-kyverno:v1.19.8`. Note that it contains no docker images other than those necessary to run a k8s cluster, so if you want to use this ClusterImage, and you also need other docker images(such as `nginx`) to run a container, you need to cache the docker images to your private registry.
 
 Of course `sealer` can help you do this,use `nginx` as an example.
 Firstly include nginx in the file `imageList`.
@@ -27,7 +27,7 @@ COPY imageList manifests
 CMD kubectl run nginx --image=nginx:latest
 ```
 
-Thirdly execute `sealer build` to build a new cloud image
+Thirdly execute `sealer build` to build a new ClusterImage
 
 ```
  [root@ubuntu ~]# sealer build -t my-nginx-kubernetes:v1.19.8 .
@@ -35,11 +35,11 @@ Thirdly execute `sealer build` to build a new cloud image
 
 Just a simple command and let sealer help you cache `nginx:latest` image to private registry. You may doubt whether sealer has successfully cached the image, please execute `sealer inspect my-nginx-kubernetes:v1.19.8` and locate the `layer` attribute of the `spec` section, you will find there are many layers. In this case, the last layer has two `key:value` pairs: `type: BASE`, `value: registry cache`, from which we know it's about images cached to registry. Remembering this layer's id, execute `cd /var/lib/sealer/data/overlay2/{layer-id}/registry/docker/registry/v2/repositories/library`, then you will find the nginx image existing in the directory.
 
-Now you can use this new cloud image to create k8s cluster. After your cluster startup, there is already a pod running `nginx:latest` image, you can see it by execute `kubectl describe pod nginx`, and you can also create more pods running `nginx:latest` image.
+Now you can use this new ClusterImage to create k8s cluster. After your cluster startup, there is already a pod running `nginx:latest` image, you can see it by execute `kubectl describe pod nginx`, and you can also create more pods running `nginx:latest` image.
 
 ### How to build kyverno BaseImage
 
-The following is a sequence steps of building kyverno build-in cloud image
+The following is a sequence steps of building kyverno build-in ClusterImage
 
 #### Step 1: choose a base image
 

@@ -29,7 +29,7 @@ Flags:
 
 More examples :
 
-run cloud image on an exists servers
+run ClusterImage on an exists servers
 
 Server ip address| 192.168.0.1 ~ 192.168.0.13
 ---|---

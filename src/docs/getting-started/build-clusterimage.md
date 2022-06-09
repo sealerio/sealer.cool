@@ -1,4 +1,4 @@
-# Build CloudImage
+# Build ClusterImage
 
 ## Build prerequisite
 
@@ -30,7 +30,7 @@ Flags:
   -f, --kubefile string     kubefile filepath (default "Kubefile")
   -m, --mode string         cluster image build type, default is lite (default "lite")
       --no-cache            build without cache
-      --platform string     set cloud image platform,if not set,keep same platform with runtime
+      --platform string     set ClusterImage platform,if not set,keep same platform with runtime
 ```
 
 ## Build instruction
@@ -68,7 +68,7 @@ Copy the executable binary "helm" to the system $PATH.
 
 `COPY helm ./bin`
 
-Copy remote web file or git repository to cloud image.
+Copy remote web file or git repository to ClusterImage.
 
 `COPY https://github.com/sealerio/applications/raw/main/cassandra/cassandra-manifest.yaml manifests`
 
@@ -136,10 +136,10 @@ Currently, sealer build only supports lite build for different requirement scena
 ### lite build mode
 
 The lightest build mode. By parsing the helm Chart, submitting the image list, parsing the kubernetes resource file
-under the manifest to build the cloud image. and this can be done without starting the cluster
+under the manifest to build the ClusterImage. and this can be done without starting the cluster
 
 The advantages of this build mode is the lowest resource consumption . Any host installed sealer can use this mode to
-build cloud image.
+build ClusterImage.
 
 The disadvantage is that some scenarios cannot be covered. For example, the image deployed through the operator cannot
 be obtained, and some images delivered through proprietary management tools are also can not be used.
@@ -357,7 +357,7 @@ COPY imageList manifests
 
 ### base image without network plugin
 
-platform of base CloudImage support both amd64 and arm64.
+platform of base ClusterImage support both amd64 and arm64.
 
 |image name | kubernetes version|docker version|
 --- |  ---| ---|
@@ -365,7 +365,7 @@ platform of base CloudImage support both amd64 and arm64.
 
 ### base image with sealer docker and calico
 
-platform of base CloudImage support both amd64 and arm64.
+platform of base ClusterImage support both amd64 and arm64.
 
 |image name | kubernetes version|docker version|
 --- |  ---| ---|

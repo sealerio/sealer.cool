@@ -1,4 +1,4 @@
-# ARM CloudImage
+# ARM ClusterImage
 
 Download sealer for example download v0.8.5:
 
@@ -12,9 +12,9 @@ wget https://github.com/sealerio/sealer/releases/download/v0.8.5/sealer-v0.8.5-l
 sealer run kubernetes:v1.19.8 --master 192.168.0.3 --passwd xxx
 ```
 
-## Build an ARM cloud image
+## Build an ARM ClusterImage
 
-Just "FROM" the ARM cloud image to run sealer build on any platform will build out the ARM cloud image .
+Just "FROM" the ARM ClusterImage to run sealer build on any platform will build out the ARM ClusterImage .
 
 Kubefile example:
 
@@ -25,13 +25,13 @@ COPY recommended.yaml manifests
 CMD kubectl apply -f manifests/recommended.yaml
 ```
 
-Run an ARM dashboard cloud image.
+Run an ARM dashboard ClusterImage.
 
 ```shell
 sealer build -f Kubefile -t my-dashboard:v1 .
 ```
 
-Run this arm dashboard cloud image.
+Run this arm dashboard ClusterImage.
 
 ```shell
 sealer run my-dashboard:v1 --master 192.168.0.3 --passwd xxx

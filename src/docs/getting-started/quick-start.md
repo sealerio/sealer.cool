@@ -31,25 +31,25 @@ Some information of the basic settings will be written to the Clusterfile and st
 sealer delete -f /root/.sealer/my-cluster/Clusterfile
 ```
 
-## Build your own CloudImage
+## Build your own ClusterImage
 
-For example, build a dashboard CloudImage:
+For example, build a dashboard ClusterImage:
 
 Kubefile:
 
 ```shell script
-# base CloudImage contains all the files that run a kubernetes cluster needed.
+# base ClusterImage contains all the files that run a kubernetes cluster needed.
 #    1. kubernetes components like kubectl kubeadm kubelet and apiserver images ...
 #    2. docker engine, and a private registry
 #    3. config files, yaml, static files, scripts ...
 FROM registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8
 # download kubernetes dashboard yaml file
 RUN wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
-# when run this CloudImage, will apply a dashboard manifests
+# when run this ClusterImage, will apply a dashboard manifests
 CMD kubectl apply -f recommended.yaml
 ```
 
-Build dashboard CloudImage:
+Build dashboard ClusterImage:
 
 ```shell script
 sealer build -t registry.cn-qingdao.aliyuncs.com/sealer-io/dashboard:latest .
@@ -64,9 +64,9 @@ sealer run registry.cn-qingdao.aliyuncs.com/sealer-io/dashboard:latest --masters
 kubectl get pod -A|grep dashboard
 ```
 
-## Push the CloudImage to the registry
+## Push the ClusterImage to the registry
 
 ```shell script
-# you can push the CloudImage to docker hub, Ali ACR, or Harbor
+# you can push the ClusterImage to docker hub, Ali ACR, or Harbor
 sealer push registry.cn-qingdao.aliyuncs.com/sealer-io/dashboard:latest
 ```

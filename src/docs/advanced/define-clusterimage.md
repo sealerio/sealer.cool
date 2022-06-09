@@ -1,19 +1,20 @@
-# 自定义Cloud image
+# Customize ClusterImage
 
-## 自定义CloudRootfs
+## Customize the ClusterImage rootfs
 
-运行kubernetes集群所需的所有文件。
+All the files which run a kubernetes cluster needs.
 
-其中包含：
+Contains:
 
-* Bin 文件，如 docker、containerd、crictl、kubeadm、kubectl...
-* 配置文件，如 kubelet systemd config、docker systemd config、docker daemon.json...
-* 注册docker镜像。
-* 一些元数据，例如 Kubernetes 版本
-* 注册表文件，包含所有的docker镜像，比如kubernetes核心组件docker镜像...* Scripts, some shell script using to install docker and kubelet... sealer will call init.sh and clean.sh.
-* 其他静态文件
+* Bin files, like docker, containerd, crictl ,kubeadm, kubectl...
+* Config files, like kubelet systemd config, docker systemd config, docker daemon.json...
+* Registry docker image.
+* Some Metadata, like Kubernetes version.
+* Registry files, contains all the docker image, like kubernetes core component docker images...
+* Scripts, some shell script using to install docker and kubelet... sealer will call init.sh and clean.sh.
+* Other static files
 
-rootfs 树状图
+rootfs dendrogram
 
 ```
 .
@@ -28,22 +29,22 @@ rootfs 树状图
 │   ├── nerdctl
 │   └── seautil
 ├── cri
-│   └── docker.tar.gz # cri 二进制文件包括 docker、containerd、runc。
+│   └── docker.tar.gz # cri bin files include docker,containerd,runc.
 ├── etc
 │   ├── 10-kubeadm.conf
-│   ├── Clusterfile  # 镜像默认集群文件
-│   ├── daemon.json # docker 守护进程配置文件。
+│   ├── Clusterfile  # image default Clusterfile
+│   ├── daemon.json # docker daemon config file.
 │   ├── docker.service
-│   ├── kubeadm.yml # kubeadm config 包括 Cluster Configuration、JoinConfiguration 等。
+│   ├── kubeadm.yml # kubeadm config including Cluster Configuration,JoinConfiguration and so on.
 │   ├── kubelet.service
-│   ├── registry_config.yml # docker 注册表配置，包括存储根目录和 http 相关配置。
-│   └── registry.yml # 如果用户想自定义用户名和密码，可以覆盖这个文件。
+│   ├── registry_config.yml # docker registry config including storage root directory and http related config.
+│   └── registry.yml # If the user wants to customize the username and password, can overwrite this file.
 ├── images
-│   └── registry.tar  # 注册docker镜像，将加载此镜像并在集群中运行本地注册表
+│   └── registry.tar  # registry docker image, will load this image and run a local registry in cluster
 ├── Kubefile
 ├── Metadata
 ├── README.md
-├── registry # 将此目录挂载到本地注册表
+├── registry # will mount this dir to local registry
 │   └── docker
 │       └── registry
 ├── scripts
@@ -53,21 +54,22 @@ rootfs 树状图
 │   ├── init-registry.sh
 │   ├── init.sh
 │   └── kubelet-pre-start.sh
-└── statics # yaml文件, sealer 将渲染这些文件中的值
+└── statics # yaml files, sealer will render values in those files
     └── audit-policy.yml
 ```
 
-### 如何获取 CloudRootfs
+### How can I get ClusterImage rootfs
 
-1. 拉取基础镜像 `sealer pull kubernetes:v1.19.8-alpine`
-2. 查看镜像层信息 `sealer inspect kubernetes:v1.19.8-alpine`
-3. 进入BaseImage层 `ls /var/lib/sealer/data/overlay2/{layer-id}`
+1. Pull a BaseImage `sealer pull kubernetes:v1.19.8-alpine`
+2. View the image layer information `sealer inspect kubernetes:v1.19.8-alpine`
+3. Get into the BaseImage Layer `ls /var/lib/sealer/data/overlay2/{layer-id}`
 
-您将找到 CloudRootfs 层。
+You will find the ClusterImage rootfs layer.
 
-### 构建自己的 CloudRootfs
+### Build your own ClusterImage rootfs
 
-您可以在 CloudRootfs 中编辑您想要的任何文件，例如您想定义自己的 docker daemon.json，只需编辑它并构建一个新的 CloudImage。
+You can edit any files in ClusterImage rootfs you want, for example you want to define your own docker daemon.json, just edit it
+and build a new ClusterImage.
 
 ```shell script
 FROM scratch
@@ -78,15 +80,16 @@ COPY . .
 sealer build -t user-defined-kubernetes:v1.19.8 .
 ```
 
-然后，您可以将此镜像用作 BaseImage。
+Then you can use this image as a BaseImage.
 
-### 覆盖 CloudRootfs 文件
+### OverWrite ClusterImage rootfs files
 
-有时您不想关心 CloudRootfs 上下文，但需要自定义一些配置。
+Sometimes you don't want to care about the ClusterImage rootfs context, but need custom some config.
 
-您可以使用 `kubernetes:v1.19.8` 作为 BaseImage，并使用自己的配置文件覆盖 CloudRootfs 中的默认文件。
+You can use `kubernetes:v1.19.8` as BaseImage, and use your own config file to overwrite the default file in
+ClusterImage rootfs.
 
-例如：daemon.json 是您的 docker 引擎配置，使用它来覆盖默认配置：
+For example: daemon.json is your docker engine config, using it to overwrite default config:
 
 ```shell script
 FROM kubernetes:v1.19.8
@@ -97,25 +100,27 @@ COPY daemon.json etc/
 sealer build -t user-defined-kubernetes:v1.19.8 .
 ```
 
-## 构建cloud image
+## Build the ClusterImage
 
-### 使用特定目录构建
+### Build with specific directory
 
-#### image目录
+#### images directory
 
-保存容器镜像的目录，该目录下的离线镜像会在sealer运行时加载到内置注册表中。
+Directory to save container images,the offline image in this directory will be load into the built-in registry when
+sealer run.
 
-示例：将离线 tar 文件复制到此目录。
+Examples: copy offline tar file to this directory.
 
 `COPY mysql.tar images`
 
-#### plugin目录
+#### plugin directory
 
-插件文件保存目录，该目录下的插件文件会在sealer运行时加载到运行界面。
+Directory to save plugin files, the plugin file in this directory will be load into the runtime interface when sealer
+run.
 
-示例：将插件配置文件复制到此目录。
+Examples: copy plugin config file to this directory.
 
-插件配置：shell.yaml：
+plugin config: shell.yaml:
 
 ```
 apiVersion: sealer.aliyun.com/v1alpha1
@@ -132,19 +137,21 @@ spec:
 
 `COPY shell.yaml plugins`
 
-#### charts目录
+#### charts directory
 
-保存charts包的目录，sealer构建时会解析该目录下的charts文件，下载并保存对应的容器镜像。
+Directory to save charts packages,When sealer builds, it parses the charts file in this directory, and downloads and
+saves the corresponding container image.
 
-示例：将 nginx charts复制到此目录。
+Examples: copy nginx charts to this directory.
 
 `COPY nginx charts`
 
-#### manifests目录
+#### manifests directory
 
-保存yaml文件或“imageList”文件的目录，sealer构建时会解析该目录下的yaml和“imageList”文件，下载并保存对应的容器镜像。
+Directory to save yaml file or "imageList" file,When sealer builds, it parses the yaml and "imageList" file in this
+directory, and downloads and saves the corresponding container image.
 
-示例：将“imageList”文件复制到此目录。
+Examples: copy "imageList" file to this directory.
 
 ```shell
 [root@iZbp143f9driomgoqx2krlZ build]# cat imageList
@@ -153,36 +160,41 @@ busybox
 
 `COPY imageList manifests`
 
-示例：将仪表板 yaml 文件复制到此目录。
+Examples: copy dashboard yaml file to this directory.
 
 `COPY recommend.yaml manifests`
 
-### 自定义私有registry
+### Customize the private registry
 
-Sealer对docker registry进行了优化和扩展，使其可以同时支持多个域名的代理缓存和多个私有registry。
+Sealer optimizes and expands the docker registry, so that it can support proxy caching of multiple domain names and
+multiple private registry at the same time.
 
-在构建过程中，会出现使用需要身份验证的私有registry的情况。在这种情况下，镜像缓存需要 docker 的身份验证。在执行构建操作之前，可以先通过以下命令进行登录操作：
+During the build process, there will be a scenario where it uses a private registry which requires authentication. In
+this scenario, the authentication of docker is required for image caching. You can perform the login operation first
+through the following command before executing the build operation:
 
 ```shell
 sealer login registry.com -u username -p password
 ```
 
-另一种依赖场景，kubernetes节点通过sealer内置registry代理私有registry，私有registry需要认证，可以通过自定义registry config配置。参考 [registry config](https://github.com/sealerio/sealer/tree/main/docs/design/docker-image-cache.md)
+Another dependent scenario, the kubernetes node is proxies to the private registry through the built-in registry of
+sealer and the private registry needs to be authenticated, it can be configured through the custom registry config.Refer
+to [registry config](https://github.com/sealerio/sealer/tree/main/docs/design/docker-image-cache.md)
 
-您可以通过定义 Kubefile 来自定义注册表配置：
+You can customize the registry configuration by defining Kubefile:
 
 ```shell
 FROM kubernetes:v1.19.8
 COPY registry_config.yaml etc/
 ```
 
-### 自定义 kubeadm 配置
+### Customize the kubeadm configuration
 
-Sealer 会将默认配置替换为 $Rootfs/etc/kubeadm.yml 中的自定义配置文件。
+Sealer will replace the default configuration with a custom configuration file in $Rootfs/etc/kubeadm.yml.
 
-#### 示例：使用 Docker Unix socket的自定义配置。
+#### Example: Custom configuration using the Docker Unix socket.
 
-1. 自定义 kubeadm 初始化配置：
+1. customize kubeadm init configuration:
 
 ```yaml
 apiVersion: kubeadm.k8s.io/v1beta2
@@ -193,7 +205,7 @@ nodeRegistration:
   criSocket: /var/run/dockershim.sock
 ```
 
-2. 自定义 kubeadm join 配置：
+2. customize kubeadm join configuration:
 
 ```yaml
 apiVersion: kubeadm.k8s.io/v1beta2
@@ -208,7 +220,8 @@ controlPlane:
     bindPort: 6443
 ```
 
-3. 构建您自己的云映像，使用自定义配置覆盖默认配置。请注意，文件名“kubeadm.yml”是固定的：
+3. Build your own ClusterImage that override default configurations with custom configurations. Note that,the file name "
+   kubeadm.yml" is fixed:
 
 ```yaml
 #Kubefile
@@ -218,9 +231,9 @@ COPY kubeadm.yml etc
 
 > sealer build -t user-define-kubeadm-kubernetes:v1.19.8 .
 
-#### 包含完整内容的默认 kubeadm 配置文件：
+#### Default kubeadm configuration file with completely contents:
 
-选择 kubeadm.yml 的任何部分进行自定义：
+pick any section of kubeadm.yml to customize:
 
 ```yaml
 apiVersion: kubeadm.k8s.io/v1beta2

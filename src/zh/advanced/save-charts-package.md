@@ -1,6 +1,6 @@
 # Save helm chart package
 
-Sealer support to save raw helm chart package to cloud image as oci format. with this feature, we can pull the helm
+Sealer support to save raw helm chart package to ClusterImage as oci format. with this feature, we can pull the helm
 chart package in other offline production environment.
 
 ## Prerequisites
@@ -26,7 +26,7 @@ export HELM_EXPERIMENTAL_OCI=1
 helm push mysql-8.8.25.tgz oci://localhost:5000/helm-charts
 ```
 
-#### Use sealer build to save helm chart package from local registry to cloud image.
+#### Use sealer build to save helm chart package from local registry to ClusterImage.
 
 Prepare Kubefile:
 
@@ -87,7 +87,7 @@ FROM kubernetes:v1.19.8
 COPY imageList manifests
 ```
 
-3. Build CloudImage and save ACR remote chart to local registry
+3. Build ClusterImage and save ACR remote chart to local registry
 
 ```shell script
 sealer build -t chart:latest .

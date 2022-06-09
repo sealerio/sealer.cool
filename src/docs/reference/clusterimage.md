@@ -1,4 +1,4 @@
-# What is CloudRootfs
+# What is ClusterImage rootfs
 
 All the files witch run a kubernetes cluster needs.
 
@@ -63,17 +63,17 @@ Contains:
     └── audit-policy.yml
 ```
 
-## How can I get CloudRootfs
+## How can I get ClusterImage rootfs
 
 1. Pull a BaseImage `sealer pull kubernetes:v1.19.8-alpine`
 2. View the image layer information `sealer inspect kubernetes:v1.19.8-alpine`
 3. Get into the BaseImage Layer `ls /var/lib/sealer/data/overlay2/{layer-id}`
 
-You will found the CloudRootfs layer.
+You will found the ClusterImage rootfs layer.
 
 ## Build your own BaseImage
 
-You can edit any files in CloudRootfs you want, for example you want to define your own docker daemon.json, just edit it and build a new CloudImage.
+You can edit any files in ClusterImage rootfs you want, for example you want to define your own docker daemon.json, just edit it and build a new ClusterImage.
 
 ```shell script
 FROM scratch
@@ -86,11 +86,11 @@ sealer build -t user-defined-kubernetes:v1.19.8 .
 
 Then you can use this image as a BaseImage.
 
-## OverWrite CloudRootfs files
+## OverWrite ClusterImage rootfs files
 
-Sometimes you don't want to care about the CloudRootfs context, but need custom some config.
+Sometimes you don't want to care about the ClusterImage rootfs context, but need custom some config.
 
-You can use `kubernetes:v1.19.8` as BaseImage, and use your own config file to overwrite the default file in CloudRootfs.
+You can use `kubernetes:v1.19.8` as BaseImage, and use your own config file to overwrite the default file in ClusterImage rootfs.
 
 For example: daemon.json is your docker engine config, using it to overwrite default config:
 
