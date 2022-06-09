@@ -86,7 +86,7 @@ spec:
 ### The Scope of Env render
 
 1. set ENV when execute shell command.
-2. render Env in file content of CloudImage
+2. render Env in file content of ClusterImage
 
 special directory at rootfs will be rendered,that's means ,each file in above dir named with extension "tmpl",will be
 rendered.
@@ -323,7 +323,7 @@ Replace `podcidr` in kubeadm and Calico configurations with `podcidr` in Env in 
 
 ## Overwrite CMD support
 
-This case show you how to use `cmd` fields of Clusterfile to overwrite cloud image startup.
+This case show you how to use `cmd` fields of Clusterfile to overwrite ClusterImage startup.
 
 Kubefile:
 
@@ -354,7 +354,7 @@ spec:
 
 ## Using Clusterfile to define your own kubeadm config
 
-The better way is to add kubeadm config directly into Clusterfile, of course every CloudImage has it default config:
+The better way is to add kubeadm config directly into Clusterfile, of course every ClusterImage has it default config:
 You can only define part of those configs, sealer will merge then into default config.
 
 ```yaml

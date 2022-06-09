@@ -1,4 +1,4 @@
-# Applications CloudImage
+# Applications ClusterImage
 
 Before using the sealer official applications, you need to install the [sealer](https://github.com/sealerio/sealer).
 
@@ -7,7 +7,7 @@ Before using the sealer official applications, you need to install the [sealer](
 We choose OpenEBS Jiva or OpenEBS LocalPV as default persistence storage to enable Stateful applications to easily access Dynamic Local PVs
 or Replicated PVs. More details about the application can be found in its manifest directory.
 
-### Cloud image list
+### ClusterImage list
 
 #### Toolkit images
 
@@ -73,7 +73,7 @@ spec:
       roles: [ node ]
 ```
 
-if you want to apply a cloud image which need persistence storage. we provide openebs as cloud storage backend. OpenEBS
+if you want to apply a ClusterImage which need persistence storage. we provide openebs as cloud storage backend. OpenEBS
 provides block volume support through the iSCSI protocol. Therefore, the iSCSI client (initiator) presence on all
 Kubernetes nodes is required. Choose the platform below to find the steps to verify if the iSCSI client is installed and
 running or to find the steps to install the iSCSI client.For openebs, different storage engine need to config different

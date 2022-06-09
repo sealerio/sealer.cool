@@ -1,6 +1,6 @@
-# cloud rootfs
+# ClusterImage rootfs
 
-cloud rootfs will package all the dependencies refers to the kubernetes cluster requirements
+ClusterImage rootfs will package all the dependencies refers to the kubernetes cluster requirements
 
 ```shell script
 .
@@ -53,7 +53,7 @@ cloud rootfs will package all the dependencies refers to the kubernetes cluster 
     └── audit-policy.yml
 ```
 
-Using cloud rootfs to build a base cloudImage:
+Using ClusterImage rootfs to build a base ClusterImage:
 
 ```shell script
 FROM scratch

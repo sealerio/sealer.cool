@@ -1,4 +1,4 @@
-# GPU CloudImage
+# GPU ClusterImage
 
 ## Preparation
 

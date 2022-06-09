@@ -2,7 +2,7 @@
 
 ## Motivations
 
-We can use docker containers running as IAAS infra or an isolated environment to test cloud image or build a new one
+We can use docker containers running as IAAS infra or an isolated environment to test ClusterImage or build a new one
 which consumes very few resources.
 
 ## Prerequisites
@@ -63,7 +63,7 @@ docker cp /usr/local/bin/sealer master1:/usr/local/bin/sealer
 docker exec -it master1 /bin/bash
 ```
 
-2. write the Kubefile in container "master1" and build the cloud image
+2. write the Kubefile in container "master1" and build the ClusterImage
 
 ```shell
 sealer build -f Kubefile -t my-images:v1 .

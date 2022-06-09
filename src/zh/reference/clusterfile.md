@@ -45,7 +45,7 @@ kind: Cluster
 metadata:
   name: my-cluster
 spec:
-  image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8 # name of CloudImage
+  image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8 # name of ClusterImage
   provider: ALI_CLOUD # OR CONTAINER
   ssh: # custom host ssh config
     passwd: xxx

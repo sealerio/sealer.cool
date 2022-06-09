@@ -14,14 +14,14 @@ official base images are available from the Sealer community.
 
 USAGE：
 
-For example ,use the base image `kubernetes:v1.19.8` which provided by the Sealer community to build a new cloud image.
+For example ,use the base image `kubernetes:v1.19.8` which provided by the Sealer community to build a new ClusterImage.
 
 `FROM registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8`
 
 ## COPY instruction
 
 The `COPY` instruction used to copy the contents from the context path such as file or directory to the `rootfs`. all
-the cloud image is based on the [rootfs](../../api/cloudrootfs.md), and the default src path is
+the ClusterImage is based on the [rootfs](../../api/ClusterImage rootfs.md), and the default src path is
 the `rootfs` .If the specified destination directory does not exist, sealer will create it automatically.
 
 > command format：COPY {src dest}

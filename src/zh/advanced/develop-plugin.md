@@ -61,7 +61,7 @@ go build -buildmode=plugin -o list_nodes.so list_nodes.go
 
 3. use the new so file
 
-Copy the so file and plugin config file to your cloud image.We can also append plugin yaml to Clusterfile and
+Copy the so file and plugin config file to your ClusterImage.We can also append plugin yaml to Clusterfile and
 use `sealer apply -f Clusterfile` to test it.
 
 Kubefile:

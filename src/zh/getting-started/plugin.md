@@ -149,7 +149,7 @@ spec:
 at present, we only support the golang so file as out of tree plugin. More description about golang plugin
 see [golang plugin website](https://pkg.go.dev/plugin).
 
-copy the so file and the plugin config to your cloud image at build stage use `Kubefile`,sealer will parse and execute
+copy the so file and the plugin config to your ClusterImage at build stage use `Kubefile`,sealer will parse and execute
 it. develop your own out of tree plugin see [sealer plugin](../advanced/develop-plugin.md).
 
 plugin config:

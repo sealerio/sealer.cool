@@ -4,18 +4,18 @@
 
 Sealer has two top module: Build Engine & Apply Engine
 
-The Build Engine Using Kubefile and build context as input, and build a CloudImage that contains all the dependencies.
+The Build Engine Using Kubefile and build context as input, and build a ClusterImage that contains all the dependencies.
 The Apply Engine Using Clusterfile to init a cluster which contains kubernetes and other applications.
 
 ## Build Engine
 
 * Parser : parse Kubefile into image metadata
-* Registry : push or pull the CloudImage
-* Store : save CloudImage to local disks
+* Registry : push or pull the ClusterImage
+* Store : save ClusterImage to local disks
 
 ### Builders
 
-* Lite Builder, sealer will check all the manifest or helm chart, decode docker images in those files, and cache them into CloudImage.
+* Lite Builder, sealer will check all the manifest or helm chart, decode docker images in those files, and cache them into ClusterImage.
 * Cloud Builder, sealer will create a Cluster using public cloud, and exec `RUN & CMD` command which defined in Kubefile, then cache all the docker image in the Cluster.
 * Container Builder, Using Docker container as a node, run kubernetes cluster in container then cache all the docker images.
 
@@ -29,8 +29,8 @@ The Apply Engine Using Clusterfile to init a cluster which contains kubernetes a
 
 ## Other modules
 
-* Filesystem : Copy CloudRootfs files to all nodes
-* Mount : mount CloudImage all layers together
+* Filesystem : Copy ClusterImage rootfs files to all nodes
+* Mount : mount ClusterImage all layers together
 * Checker : do some pre-check and post check
 * Command : a command proxy to do some tasks which os don't have the command. Like ipvs or cert manager.
 * Guest : manage user application layer, like exec CMD command defined in Kubefile.

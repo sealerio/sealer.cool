@@ -7,9 +7,9 @@ actionLink: "/docs/getting-started/introduction"
 features:
 
 - title: Build
-  details: Sealer provide a way to seal applications all dependencies and kubernetes into CloudImage, Using Kubefile to define whatever you want
+  details: Sealer provide a way to seal applications all dependencies and kubernetes into ClusterImage, Using Kubefile to define whatever you want
 - title: Share
-  details: You can push CloudImage to registry and share it to anyone
+  details: You can push ClusterImage to registry and share it to anyone
 - title: Run
   details: Run kubernetes cluster with your dependencies and applications in few minute on anywhere
 ---
