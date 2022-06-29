@@ -19,7 +19,7 @@
 ## COPY指令
 
 `COPY` 指令用于将文件或目录等上下文路径中的内容复制到 `rootfs`。
-所有的云镜像都是基于[rootfs](../api/cloudrootfs.md)，默认src路径是`rootfs`。
+所有的云镜像都是基于[rootfs](../../api/cloudrootfs.md)，默认src路径是`rootfs`。
 如果指定的目标目录不存在，sealer会自动创建。
 
 > 命令格式：COPY {src dest}
@@ -36,8 +36,8 @@
 
 ## RUN指令
 
-RUN指令将在当前图像之上的新层中执行任何命令并提交结果。
-生成的提交图像将用于“Kubefile”中的下一步。
+RUN指令将在当前镜像之上的新层中执行任何命令并提交结果。
+生成的提交镜像将用于“Kubefile”中的下一步。
 
 > 命令格式：RUN {command args ...}
 

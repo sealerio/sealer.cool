@@ -34,14 +34,14 @@ CMD kubectl run nginx --image=nginx:latest
 
 只需一个简单的命令，让 sealer 帮助您将 `nginx:latest` 镜像缓存到私有注册表。
 你可能会怀疑 sealer 是否成功缓存了图片，请执行 `sealer inspect my-nginx-kubernetes:v1.19.8` 找到 `spec` 部分的 `layer` 属性，你会发现有很多层。在这种情况下，最后一层有两个 `key:value` 对：`type: BASE`、`value: registry cache`，
-从中我们知道它是关于缓存到注册表的图像。记住这一层的id，执行`cd varlibsealerdataoverlay2{layer-id}registrydockerregistryv2repositorieslibrary`，然后你会发现目录中存在nginx镜像。
+从中我们知道它是关于缓存到注册表的镜像。记住这一层的id，执行`cd varlibsealerdataoverlay2{layer-id}registrydockerregistryv2repositorieslibrary`，然后你会发现目录中存在nginx镜像。
 现在您可以使用这个新的云镜像来创建k8s集群。在你的集群启动后，已经有一个 pod 运行 `nginx:latest` 镜像，你可以通过执行 `kubectl describe pod nginx` 看到它，你也可以创建更多运行 `nginx:latest` 镜像的 pod。
 
 ### 怎样构建kyverno基础镜像
 
 以下是构建kyverno内置云镜像的顺序步骤
 
-#### Step 1: 选择基础图像
+#### Step 1: 选择基础镜像
 
 选择一个可以创建至少一个主节点和一个工作节点的 k8s 集群的基础镜像。为了演示工作流程，我将使用 `kubernetes-rawdocker:v1.19.8`。您可以通过执行 `sealer pull kubernetes-rawdocker:v1.19.8` 获得相同的镜像。
 
@@ -49,7 +49,7 @@ CMD kubectl run nginx --image=nginx:latest
 
 在`https:raw.githubusercontent.comkyvernokyvernorelease-1.5definitionsreleaseinstall.yaml`下载kyverno的“install.yaml”，你可以替换成你想要的版本。我在这个演示中使用 1.5。
 
-为了在离线环境中使用 kyverno 基础镜像，您需要缓存 `install.yaml` 中使用的图像。在这种情况下，需要缓存两个docker镜像：`ghcr.iokyvernokyverno:v1.5.1` 和 `ghcr.iokyvernokyvernopre:v1.5.1`。
+为了在离线环境中使用 kyverno 基础镜像，您需要缓存 `install.yaml` 中使用的镜像。在这种情况下，需要缓存两个docker镜像：`ghcr.iokyvernokyverno:v1.5.1` 和 `ghcr.iokyvernokyvernopre:v1.5.1`。
 因此，首先在 `install.yaml` 中将它们重命名为 `sea.hub:5000kyvernokyverno:v1.5.1` 和 `sea.hub:5000kyvernokyvernopre:v1.5.1`，其中 `sea.hub:5000` 是你的 k8s 集群。然后创建一个包含以下内容的文件`imageList`：
 ```
 ghcr.io/kyverno/kyverno:v1.5.1
@@ -111,7 +111,7 @@ spec:
 
 ```
 
-此ClusterPolicy会将图像拉取请求重定向到私有注册表 `sea.hub:5000`，我将此文件命名为 redirect-registry.yaml
+此ClusterPolicy会将镜像拉取请求重定向到私有注册表 `sea.hub:5000`，我将此文件命名为 redirect-registry.yaml
 
 #### Step 4: 创建一个shell脚本去监控kyverno pod
 

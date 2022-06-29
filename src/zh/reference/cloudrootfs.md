@@ -66,7 +66,7 @@
 ## 如何获取 ClusterRootfs
 
 1. 拉取一个基础镜像 `sealer pull kubernetes:v1.19.8-alpine`
-2. 查看图像层信息 `sealer inspect kubernetes:v1.19.8-alpine`
+2. 查看镜像层信息 `sealer inspect kubernetes:v1.19.8-alpine`
 3. 进入基础镜像层 `ls /var/lib/sealer/data/overlay2/{layer-id}`
 
 您将找到ClusterRootfs层。

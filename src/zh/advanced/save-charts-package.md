@@ -1,6 +1,6 @@
 # 保存helm chart包
 
-Sealer支持将原始helm图表包保存为oci格式的云图像。
+Sealer支持将原始helm图表包保存为oci格式的云镜像。
 有了这个功能，我们可以在其他离线生产环境中拉取helm chart包。
 
 ## 先决条件
