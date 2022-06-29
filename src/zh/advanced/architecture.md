@@ -9,7 +9,7 @@ Apply Engine使用Clusterfile来初始化包含kubernetes和其他应用程序�
 
 ## Build Engine
 
-* Parser : 将Kubefile解析为图像元数据
+* Parser : 将Kubefile解析为镜像元数据
 * Registry : 推送或拉取 ClusterImage
 * Store : 将ClusterImage保存到本地磁盘
 

@@ -19,7 +19,7 @@
 ## COPY指令
 
 `COPY` 指令用于将文件或目录等上下文路径中的内容复制到 `rootfs`。
-所有的云镜像都是基于[rootfs](....apicloudrootfs.md)，默认src路径是`rootfs`。
+所有的云镜像都是基于[rootfs](../api/cloudrootfs.md)，默认src路径是`rootfs`。
 如果指定的目标目录不存在，sealer会自动创建。
 
 > 命令格式：COPY {src dest}

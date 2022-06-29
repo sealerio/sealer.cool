@@ -32,7 +32,7 @@ CMD kubectl run nginx --image=nginx:latest
  [root@ubuntu ~]# sealer build -t my-nginx-kubernetes:v1.19.8 .
 ```
 
-只需一个简单的命令，让 sealer 帮助您将 `nginx:latest` 图像缓存到私有注册表。
+只需一个简单的命令，让 sealer 帮助您将 `nginx:latest` 镜像缓存到私有注册表。
 你可能会怀疑 sealer 是否成功缓存了图片，请执行 `sealer inspect my-nginx-kubernetes:v1.19.8` 找到 `spec` 部分的 `layer` 属性，你会发现有很多层。在这种情况下，最后一层有两个 `key:value` 对：`type: BASE`、`value: registry cache`，
 从中我们知道它是关于缓存到注册表的图像。记住这一层的id，执行`cd varlibsealerdataoverlay2{layer-id}registrydockerregistryv2repositorieslibrary`，然后你会发现目录中存在nginx镜像。
 现在您可以使用这个新的云镜像来创建k8s集群。在你的集群启动后，已经有一个 pod 运行 `nginx:latest` 镜像，你可以通过执行 `kubectl describe pod nginx` 看到它，你也可以创建更多运行 `nginx:latest` 镜像的 pod。
