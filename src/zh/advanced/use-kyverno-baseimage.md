@@ -13,6 +13,7 @@
 当然 `sealer` 可以帮助你做到这一点，以 `nginx` 为例。
 首先在文件`imageList`中包含nginx。
 您可以执行 `cat imageList` 以确保您已完成此操作，结果可能如下所示：
+
 ```
  [root@ubuntu ~]# cat imageList
  nginx:latest
@@ -51,6 +52,7 @@ CMD kubectl run nginx --image=nginx:latest
 
 为了在离线环境中使用 kyverno 基础镜像，您需要缓存 `install.yaml` 中使用的镜像。在这种情况下，需要缓存两个docker镜像：`ghcr.iokyvernokyverno:v1.5.1` 和 `ghcr.iokyvernokyvernopre:v1.5.1`。
 因此，首先在 `install.yaml` 中将它们重命名为 `sea.hub:5000kyvernokyverno:v1.5.1` 和 `sea.hub:5000kyvernokyvernopre:v1.5.1`，其中 `sea.hub:5000` 是你的 k8s 集群。然后创建一个包含以下内容的文件`imageList`：
+
 ```
 ghcr.io/kyverno/kyverno:v1.5.1
 ghcr.io/kyverno/kyvernopre:v1.5.1
