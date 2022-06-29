@@ -4,7 +4,7 @@
 
 Sealer 有两个核心模块：Build和Apply
 
-Build Engine使用Kubefile和构建上下文作为输入，并构建一个包含所有依赖项的ClusterImage。
+Build Engine使用Kubefile和构建上下文作为输入，构建一个包含所有依赖项的ClusterImage。
 Apply Engine使用Clusterfile来初始化包含kubernetes及业务所需应用程序的集群。
 
 ## Build Engine
