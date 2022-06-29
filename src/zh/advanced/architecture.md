@@ -1,11 +1,11 @@
-# 体系结构
+# 整体架构
 
 ![](https://user-images.githubusercontent.com/8912557/133879086-f13e3e37-65c3-43e2-977c-e8ebf8c8fb34.png)
 
-Sealer 有两个顶级模块：Build Engine和Apply Engine
+Sealer 有两个核心模块：Build和Apply
 
 Build Engine使用Kubefile和构建上下文作为输入，并构建一个包含所有依赖项的ClusterImage。
-Apply Engine使用Clusterfile来初始化包含kubernetes和其他应用程序的集群。
+Apply Engine使用Clusterfile来初始化包含kubernetes及业务所需应用程序的集群。
 
 ## Build Engine
 

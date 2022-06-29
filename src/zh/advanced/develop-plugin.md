@@ -1,6 +1,6 @@
 # 开发tree plugin.
 
-## 体系结构
+## 整体架构
 
 Sealer支持常用插件，如hostname插件，label插件，内置，用户可以根据自己的需求定义和使用。
 Sealer还支持加载由golang编写的树插件。
