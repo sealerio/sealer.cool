@@ -1,6 +1,6 @@
-# Clusterfile definition
+# Clusterfile定义
 
-Install to existing servers, the provider is `BAREMETAL`:
+安装到现有服务器，提供程序是`BAREMETAL`:
 
 ```yaml
 apiVersion: sealer.aliyun.com/v1alpha1
@@ -10,14 +10,14 @@ metadata:
 spec:
   image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8
   provider: BAREMETAL
-  ssh: # host ssh config
-    # ssh login password. If you use the key, you don't need to set the password
+  ssh: # 主机 ssh 配置
+    # ssh登录密码. 如果使用密钥，则无需设置密码
     passwd:
-    # The absolute path of the ssh private key file, for example, /root/.ssh/id_rsa
+    # sh私钥文件的绝对路径，例如, /root/.ssh/id_rsa
     pk: xxx
-    # ssh private key file password
+    # ssh 私钥文件密码
     pkPasswd: xxx
-    # ssh login user
+    # ssh 登录用户
     user: root
   network:
     podCIDR: 100.64.0.0/10
@@ -37,7 +37,7 @@ spec:
      - 172.20.126.9
 ```
 
-Automatically apply ali cloud server for installation, the provider is `ALI_CLOUD`. Or using container for installation, the provider is `CONTAINER`:
+自动申请阿里云服务器进行安装，提供者为`ALI_CLOUD`。或者使用容器进行安装，提供者是`CONTAINER`:
 
 ```yaml
 apiVersion: sealer.aliyun.com/v1alpha1
@@ -45,9 +45,9 @@ kind: Cluster
 metadata:
   name: my-cluster
 spec:
-  image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8 # name of CloudImage
+  image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8 # 镜像名称
   provider: ALI_CLOUD # OR CONTAINER
-  ssh: # custom host ssh config
+  ssh: # 自定义主机 ssh 配置
     passwd: xxx
     pk: xxx
     pkPasswd: xxx
@@ -58,7 +58,7 @@ spec:
   certSANS:
     - aliyun-inc.com
     - 10.0.0.2
-  masters: # You can specify the number of servers, system disk, data disk, cpu and memory size
+  masters: # 可以指定服务器数量、系统盘、数据盘、cpu和内存大小
     cpu: 4
     memory: 8
     count: 3

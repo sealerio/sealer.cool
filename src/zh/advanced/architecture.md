@@ -1,36 +1,36 @@
-# Architecture
+# 体系结构
 
 ![](https://user-images.githubusercontent.com/8912557/133879086-f13e3e37-65c3-43e2-977c-e8ebf8c8fb34.png)
 
-Sealer has two top module: Build Engine & Apply Engine
+Sealer 有两个顶级模块：Build Engine和Apply Engine
 
-The Build Engine Using Kubefile and build context as input, and build a CloudImage that contains all the dependencies.
-The Apply Engine Using Clusterfile to init a cluster which contains kubernetes and other applications.
+Build Engine使用Kubefile和构建上下文作为输入，并构建一个包含所有依赖项的ClusterImage。
+Apply Engine使用Clusterfile来初始化包含kubernetes和其他应用程序的集群。
 
 ## Build Engine
 
-* Parser : parse Kubefile into image metadata
-* Registry : push or pull the CloudImage
-* Store : save CloudImage to local disks
+* Parser : 将Kubefile解析为图像元数据
+* Registry : 推送或拉取 ClusterImage
+* Store : 将ClusterImage保存到本地磁盘
 
-### Builders
+### 构建方式
 
-* Lite Builder, sealer will check all the manifest or helm chart, decode docker images in those files, and cache them into CloudImage.
-* Cloud Builder, sealer will create a Cluster using public cloud, and exec `RUN & CMD` command witch defined in Kubefile, then cache all the docker image in the Cluster.
-* Container Builder, Using Docker container as a node, run kubernetes cluster in container then cache all the docker images.
+* Lite Builder，sealer将检查所有清单或helm chart，解码这些文件中的docker镜像，并将它们缓存到 ClusterImage 中。
+* Cloud Builder，sealer将使用公共云创建一个集群，并执行Kubefile中定义的RUN & CMD命令，然后将所有docker镜像缓存在集群中。
+* Container Builder，以Docker容器为节点，在容器中运行kubernetes集群，然后缓存所有的docker镜像。
 
 ## Apply Engine
 
-* Infra : manage infrastructure, like create VMs in public cloud then apply the cluster on top of it. Or using docker emulation nodes.
-* Runtime : cluster installer implementation, like using kubeadm to install cluster.
-* Config : application config, like mysql username passwd or other configs, you can use Config overwrite any file you want.
-* Plugin : plugin help us do some extra work, like exec a shell command before install, or add a label to a node after install.
-* Debug : help us check the cluster is healthy or not, find reason when things unexpected.
+* Infra : 管理基础架构，例如在公共云中创建虚拟机，然后在其上应用集群。或者使用docker仿真节点。
+* Runtime : 集群安装程序实现，例如使用kubeadm安装集群。
+* Config : 应用程序配置，如mysql用户名密码或其他配置，您可以使用Config覆盖您想要的任何文件。
+* Plugin : 插件帮助我们做一些额外的工作，比如在安装之前执行一个shell命令，或者在安装之后给一个节点添加一个标签。
+* Debug : 帮助我们检查集群是否健康，当出现意外时找到原因。
 
-## Other modules
+## 其他模块
 
-* Filesystem : Copy CloudRootfs files to all nodes
-* Mount : mount CloudImage all layers together
-* Checker : do some pre-check and post check
-* Command : a command proxy to do some tasks which os don't have the command. Like ipvs or cert manager.
-* Guest : manage user application layer, like exec CMD command defined in Kubefile.
+* Filesystem : 将ClusterRootfs文件复制到所有节点
+* Mount : 将ClusterImage所有层安装在一起
+* Checker : 做一些事前检查和事后检查
+* Command : 一个命令代理来执行一些操作系统没有命令的任务。像ipvs或证书管理器。
+* Guest : 管理用户应用层，如Kubefile中定义的exec CMD命令。

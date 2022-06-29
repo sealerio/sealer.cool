@@ -164,8 +164,8 @@ Kubefile:
 
 ```shell script
 FROM kubernetes:v1.19.8
-COPY label_nodes.so plugin
-COPY label_nodes.yaml plugin
+COPY label_nodes.so plugins
+COPY label_nodes.yaml plugins
 ```
 
 Build a cluster image that contains the golang plugin (or more plugins):
@@ -245,7 +245,7 @@ Kubefile:
 
 ```shell script
 FROM kubernetes:v1.19.8
-COPY shell.yaml plugin
+COPY shell.yaml plugins
 ```
 
 Build a cluster image that contains a taint plugin (or more plugins):

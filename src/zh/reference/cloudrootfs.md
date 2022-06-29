@@ -1,16 +1,16 @@
-# What is CloudRootfs
+# 什么是ClusterRootfs
 
-All the files witch run a kubernetes cluster needs.
+运行 kubernetes 集群所需的所有文件。
 
-Contains:
+包含:
 
-* Bin files, like docker containerd crictl kubeadm kubectl...
-* Config files, like kubelet systemd config, docker systemd config, docker daemon.json...
+* Bin 文件, like docker containerd crictl kubeadm kubectl...
+* Config 文件, like kubelet systemd config, docker systemd config, docker daemon.json...
 * Registry docker image
-* Some Metadata, like Kubernetes version.
-* Registry files, contains all the docker image, like kubernetes core component docker images...
-* Scripts, some shell script using to install docker and kubelet... sealer will call init.sh and clean.sh.
-* Other static files
+* 一些元数据, 像 Kubernetes 版本。
+* Registry 文件, 包含所有的docker镜像，比如kubernetes核心组件docker镜像...
+* Scripts, 一些用于安装docker和kubelet的shell脚本... sealer将调用init.sh和clean.sh。
+* 其他静态文件
 
 ```yaml
 .
@@ -39,17 +39,17 @@ Contains:
 │   └── vpnkit
 ├── etc
 │   ├── 10-kubeadm.conf
-│   ├── Clusterfile  # image default Clusterfile
+│   ├── Clusterfile  # 镜像默认集群文件
 │   ├── daemon.json
 │   ├── docker.service
 │   ├── kubeadm-config.yaml
 │   └── kubelet.service
 ├── images
-│   └── registry.tar  # registry docker image, will load this image and run a local registry in cluster
+│   └── registry.tar  # registry docker 镜像，将加载此镜像并在集群中运行本地registry
 ├── Kubefile
 ├── Metadata
 ├── README.md
-├── registry # will mount this dir to local registry
+├── registry # 将此目录挂载到本地registry
 │   └── docker
 │       └── registry
 ├── scripts
@@ -59,21 +59,21 @@ Contains:
 │   ├── init-registry.sh
 │   ├── init.sh
 │   └── kubelet-pre-start.sh
-└── statics # yaml files, sealer will render values in those files
+└── statics # yaml文件, sealer将渲染这些文件的值
     └── audit-policy.yml
 ```
 
-## How can I get CloudRootfs
+## 如何获取 ClusterRootfs
 
-1. Pull a BaseImage `sealer pull kubernetes:v1.19.8-alpine`
-2. View the image layer information `sealer inspect kubernetes:v1.19.8-alpine`
-3. Get into the BaseImage Layer `ls /var/lib/sealer/data/overlay2/{layer-id}`
+1. 拉取一个基础镜像 `sealer pull kubernetes:v1.19.8-alpine`
+2. 查看图像层信息 `sealer inspect kubernetes:v1.19.8-alpine`
+3. 进入基础镜像层 `ls /var/lib/sealer/data/overlay2/{layer-id}`
 
-You will found the CloudRootfs layer.
+您将找到ClusterRootfs层。
 
-## Build your own BaseImage
+## 自定义构建BaseImage
 
-You can edit any files in CloudRootfs you want, for example you want to define your own docker daemon.json, just edit it and build a new CloudImage.
+您可以在ClusterRootfs中编辑您想要的任何文件，例如您想定义自己的 docker daemon.json，只需编辑它并构建一个新的ClusterImage。
 
 ```shell script
 FROM scratch
@@ -84,15 +84,15 @@ COPY . .
 sealer build -t user-defined-kubernetes:v1.19.8 .
 ```
 
-Then you can use this image as a BaseImage.
+然后，您可以将此镜像像用作基础镜像。
 
-## OverWrite CloudRootfs files
+## 覆盖ClusterRootfs文件
 
-Sometimes you don't want to care about the CloudRootfs context, but need custom some config.
+有时您不想关心ClusterRootfs上下文，但需要自定义一些配置。
 
-You can use `kubernetes:v1.19.8` as BaseImage, and use your own config file to overwrite the default file in CloudRootfs.
+您可以使用`kubernetes:v1.19.8`作为基础镜像，并使用自己的配置文件覆盖CloudRootfs中的默认文件。
 
-For example: daemon.json is your docker engine config, using it to overwrite default config:
+例如：daemon.json是您的docker引擎配置，使用它来覆盖默认配置：
 
 ```shell script
 FROM kubernetes:v1.19.8

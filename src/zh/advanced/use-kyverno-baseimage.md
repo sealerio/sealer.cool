@@ -1,25 +1,24 @@
-# Kyverno BaseImage
+# Kyverno 基础镜像
 
-## Motivations
+## 动机
 
-It's common that some k8s clusters have their own private image registry, and they don't want to pull images from other registry for some reasons. This page is about how to integrate kyverno into k8s cluster, which will redirect image pull request to Specified registry.
+常见的一些k8s集群有自己的私有镜像registry，并且出于某些原因他们不想从其他registry中拉取镜像。这个页面是关于如何将kyverno集成到k8s集群中，它将镜像拉取请求重定向到指定的registry。
 
-## Uses case
+## 用例
 
-### How to use it
+### 怎样使用它
 
-We provide an official BaseImage which integrates kyverno into cluster:`kubernetes-kyverno:v1.19.8`. Note that it contains no docker images other than those necessary to run a k8s cluster, so if you want to use this cloud image, and you also need other docker images(such as `nginx`) to run a container, you need to cache the docker images to your private registry.
+我们提供了一个官方的基础镜像，它将kyverno集成到集群中：`kubernetes-kyverno:v1.19.8`。注意它除了运行k8s集群所必需的以外没有包含docker镜像，所以如果你想使用这个集群镜像，并且你还需要其他docker镜像（例如`nginx`）来运行容器，你需要缓存docker 镜像到你的私有registry。
 
-Of course `sealer` can help you do this,use `nginx` as an example.
-Firstly include nginx in the file `imageList`.
-You can execute `cat imageList` to make sure you have done this, and the result may seem like this:
-
+当然 `sealer` 可以帮助你做到这一点，以 `nginx` 为例。
+首先在文件`imageList`中包含nginx。
+您可以执行 `cat imageList` 以确保您已完成此操作，结果可能如下所示：
 ```
  [root@ubuntu ~]# cat imageList
  nginx:latest
 ```
 
-Secondly edit a Kubefile with the following content:
+其次编辑具有以下内容的Kubefile：
 
 ```
 FROM kubernetes-kyverno:v1.19.8
@@ -27,38 +26,39 @@ COPY imageList manifests
 CMD kubectl run nginx --image=nginx:latest
 ```
 
-Thirdly execute `sealer build` to build a new cloud image
+第三次执行`sealer build`来构建一个新的集群镜像
 
 ```
  [root@ubuntu ~]# sealer build -t my-nginx-kubernetes:v1.19.8 .
 ```
 
-Just a simple command and let sealer help you cache `nginx:latest` image to private registry. You may doubt whether sealer has successfully cached the image, please execute `sealer inspect my-nginx-kubernetes:v1.19.8` and locate the `layer` attribute of the `spec` section, you will find there are many layers. In this case, the last layer has two `key:value` pairs: `type: BASE`, `value: registry cache`, from which we know it's about images cached to registry. Remembering this layer's id, execute `cd /var/lib/sealer/data/overlay2/{layer-id}/registry/docker/registry/v2/repositories/library`, then you will find the nginx image existing in the directory.
+只需一个简单的命令，让 sealer 帮助您将 `nginx:latest` 图像缓存到私有注册表。
+你可能会怀疑 sealer 是否成功缓存了图片，请执行 `sealer inspect my-nginx-kubernetes:v1.19.8` 找到 `spec` 部分的 `layer` 属性，你会发现有很多层。在这种情况下，最后一层有两个 `key:value` 对：`type: BASE`、`value: registry cache`，
+从中我们知道它是关于缓存到注册表的图像。记住这一层的id，执行`cd varlibsealerdataoverlay2{layer-id}registrydockerregistryv2repositorieslibrary`，然后你会发现目录中存在nginx镜像。
+现在您可以使用这个新的云镜像来创建k8s集群。在你的集群启动后，已经有一个 pod 运行 `nginx:latest` 镜像，你可以通过执行 `kubectl describe pod nginx` 看到它，你也可以创建更多运行 `nginx:latest` 镜像的 pod。
 
-Now you can use this new cloud image to create k8s cluster. After your cluster startup, there is already a pod running `nginx:latest` image, you can see it by execute `kubectl describe pod nginx`, and you can also create more pods running `nginx:latest` image.
+### 怎样构建kyverno基础镜像
 
-### How to build kyverno BaseImage
+以下是构建kyverno内置云镜像的顺序步骤
 
-The following is a sequence steps of building kyverno build-in cloud image
+#### Step 1: 选择基础图像
 
-#### Step 1: choose a base image
+选择一个可以创建至少一个主节点和一个工作节点的 k8s 集群的基础镜像。为了演示工作流程，我将使用 `kubernetes-rawdocker:v1.19.8`。您可以通过执行 `sealer pull kubernetes-rawdocker:v1.19.8` 获得相同的镜像。
 
-Choose a base image which can create a k8s cluster with at least one master node and one work node. To demonstrate the workflow, I will use `kubernetes-rawdocker:v1.19.8`. You can get the same image by executing `sealer pull kubernetes-rawdocker:v1.19.8`.
+#### Step 2: 获取kyverno install.yaml并缓存镜像
 
-#### Step 2: get the kyverno install yaml and cache the image
+在`https:raw.githubusercontent.comkyvernokyvernorelease-1.5definitionsreleaseinstall.yaml`下载kyverno的“install.yaml”，你可以替换成你想要的版本。我在这个演示中使用 1.5。
 
-Download the "install.yaml" of kyverno at `https://raw.githubusercontent.com/kyverno/kyverno/release-1.5/definitions/release/install.yaml`, you can replace the version to what you want. I use 1.5 in this demonstration.
-
-In order to use kyverno BaseImage in offline environment, you need to cache the image used in `install.yaml`. In this case, there are two docker images need to be cached: `ghcr.io/kyverno/kyverno:v1.5.1` and `ghcr.io/kyverno/kyvernopre:v1.5.1`. So firstly rename them to `sea.hub:5000/kyverno/kyverno:v1.5.1` and `sea.hub:5000/kyverno/kyvernopre:v1.5.1` in the `install.yaml`, where `sea.hub:5000` is the private registry domain in your k8s cluster. Then create a file `imageList` with the following content:
-
+为了在离线环境中使用 kyverno 基础镜像，您需要缓存 `install.yaml` 中使用的图像。在这种情况下，需要缓存两个docker镜像：`ghcr.iokyvernokyverno:v1.5.1` 和 `ghcr.iokyvernokyvernopre:v1.5.1`。
+因此，首先在 `install.yaml` 中将它们重命名为 `sea.hub:5000kyvernokyverno:v1.5.1` 和 `sea.hub:5000kyvernokyvernopre:v1.5.1`，其中 `sea.hub:5000` 是你的 k8s 集群。然后创建一个包含以下内容的文件`imageList`：
 ```
 ghcr.io/kyverno/kyverno:v1.5.1
 ghcr.io/kyverno/kyvernopre:v1.5.1
 ```
 
-#### Step 3: create a ClusterPolicy
+#### Step 3: 创建集群策略
 
-Create a yaml with the following content:
+创建一个包含以下内容的 yaml：
 
 ```yaml
 apiVersion : kyverno.io/v1
@@ -111,11 +111,11 @@ spec:
 
 ```
 
-This ClusterPolicy will redirect image pull request to private registry `sea.hub:5000`, and I name this file as redirect-registry.yaml
+此ClusterPolicy会将图像拉取请求重定向到私有注册表 `sea.hub:5000`，我将此文件命名为 redirect-registry.yaml
 
-#### Step 4: create a shell script to monitor kyverno pod
+#### Step 4: 创建一个shell脚本去监控kyverno pod
 
-Because the state of kyverno pod should be running, then the ClusterPolicy will work. It's advised to create and run the following shell script to monitor the state of kyverno pod until it become running.
+因为kyverno pod的状态应该是running，所以ClusterPolicy将起作用。建议创建并运行以下shell脚本来监控kyverno pod的状态，直到它开始运行。
 
 ```shell
 #!/bin/bash
@@ -134,11 +134,11 @@ done
 echo "kyverno is running"
 ```
 
-I named this file `wait-kyverno-ready.sh`.
+命名这个文件 `wait-kyverno-ready.sh`.
 
-#### Step 5: create the build content
+#### Step 5: 创建构建内容
 
-Create a `kyvernoBuild` directory with five files: the etc/install.yaml and imageList in step 2, etc/redirect-registry.yaml in step 3, scripts/wait-kyverno-ready.sh in step 4 and a Kubefile whose content is following:
+创建一个`kyvernoBuild`目录，其中包含五个文件：步骤2中的etcinstall.yaml和imageList、步骤3中的etcredirect-registry.yaml、步骤4中的 scriptswait-kyverno-ready.sh 和一个Kubefile，其内容如下：
 
 ```shell
 FROM kubernetes-rawdocker:v1.19.8
@@ -149,6 +149,6 @@ CMD kubectl create -f etc/install.yaml && kubectl create -f etc/redirect-registr
 CMD bash scripts/wait-kyverno-ready.sh
 ```
 
-#### Step 6: build the image
+#### Step 6: 构建这个镜像
 
-Supposing you are at the `kyvernoBuild` directory, please execute `sealer build --mode lite -t kubernetes-kyverno:v1.19.8 .`
+假设你在`kyvernoBuild`目录，请执行 `sealer build --mode lite -t kubernetes-kyverno:v1.19.8 。

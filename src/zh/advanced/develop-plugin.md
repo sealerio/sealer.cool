@@ -1,24 +1,24 @@
-# Develop out of tree plugin.
+# 开发tree plugin.
 
-## Motivations
+## 体系结构
 
-Sealer support common plugins such as hostname plugin,label plugin,which is build in,user could define and use it
-according their requests. Sealer also support to load out of tree plugin which is written by golang. This page is about
-how to extend the new plugin type and how to develop an out of tree plugin.
+Sealer支持常用插件，如hostname插件，label插件，内置，用户可以根据自己的需求定义和使用。 
+Sealer还支持加载由golang编写的树插件。
+本页介绍如何扩展新的插件类型以及如何开发树外插件。
 
-## Uses case
+## 用例
 
-### How to develop an out of tree plugin
+### 如何开发tree plugin
 
-if user doesn't want their plugin code to be open sourced, we can develop an out of tree plugin to use it.
+如果用户不希望他们的插件代码开源，我们可以开发一个tree plugin来使用它。
 
-1. implement the golang plugin interface and expose the variable named `Plugin`.
+1. 实现golang插件接口并暴露名为的变量 `Plugin`.
 
-* package name must be "main"
-* exposed variable must be "Plugin"
-* exposed variable must be "PluginType"
+* 包名必须是"main"
+* 暴露的变量必须是"Plugin"
+* 暴露的变量必须是"PluginType"
 
-Examples:list_nodes.go
+例如:list_nodes.go
 
 ```shell
 package main
@@ -50,26 +50,24 @@ var PluginType = "LIST_NODE"
 var Plugin list
 ```
 
-2. build the new plugin as so file. plugin file and sealer source code must in the same golang runtime in order to avoid
-   compilation problems. we suggest the so file must build with the specific sealer version you used. otherwise,sealer
-   will fail to load the so file. you can replace the build file at the test directory
-   under [Example](https://github.com/sealerio/sealer/blob/main/pkg/plugin) to build your own so file.
+2. 将新插件构建为so文件。插件文件和sealer源代码必须在同一个golang运行时，以避免编译问题。我们建议so文件必须使用您使用的特定密封器版本构建。
+   否则，sealer将无法加载so文件。您可以替换测试目录中的构建文件
+   在下面 [Example](https://github.com/sealerio/sealer/blob/main/pkg/plugin) 建立自己的so文件。
 
 ```shell
 go build -buildmode=plugin -o list_nodes.so list_nodes.go
 ```
 
-3. use the new so file
+3. 使用新的so文件
 
-Copy the so file and plugin config file to your cloud image.We can also append plugin yaml to Clusterfile and
-use `sealer apply -f Clusterfile` to test it.
+将so文件和插件配置文件复制到您的集群镜像中。我们也可以将插件yaml附加到Clusterfile并使用`sealer apply -f Clusterfile`来测试它。
 
 Kubefile:
 
 ```shell
 FROM kubernetes:v1.19.8
-COPY list_nodes.so plugin
-COPY list_nodes.yaml plugin
+COPY list_nodes.so plugins
+COPY list_nodes.yaml plugins
 ```
 
 ```shell script
@@ -88,4 +86,4 @@ spec:
   action: PostInstall # which stage will this plugin be applied.
 ```
 
-apply it in your cluster: `sealer run kubernetes-post-install:v1.19.8 -m x.x.x.x -p xxx`
+将其应用到您的集群中: `sealer run kubernetes-post-install:v1.19.8 -m x.x.x.x -p xxx`

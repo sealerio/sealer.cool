@@ -1,12 +1,12 @@
-# Run a cluster
+# 运行集群
 
-## Run on exist servers
+## 在现有服务器上运行
 
 Server ip address| 192.168.0.1 ~ 192.168.0.13
 ---|---
 **server password**  | **sealer123**
 
-*Run the kubernetes cluster on the local server.*
+*在本地服务器上运行 kubernetes 集群。*
 
 ```shell
 sealer run kubernetes:v1.19.8 \
@@ -15,7 +15,7 @@ sealer run kubernetes:v1.19.8 \
    -p sealer123 # ssh passwd
 ```
 
-*Check the Cluster*
+*检查集群*
 
 ```shell script
 [root@iZm5e42unzb79kod55hehvZ ~]# kubectl get node
@@ -28,9 +28,9 @@ izm5ehdjw3kru84f0kq7raz Ready <none> 18h v1.19.8
 izm5ehdjw3kru84f0kq7rbz Ready <none> 18h v1.19.8
 ```
 
-### scale up and down
+### 扩容和缩容
 
-*Using join command to scale up the local server.*
+*使用 join 命令扩展本地服务器。*
 
 ```shell script
 $ sealer join \
@@ -40,7 +40,7 @@ $ sealer join \
 $ sealer join --masters 192.168.0.7-192.168.0.10 --nodes 192.168.0.11-192.168.0.13
 ```
 
-*Using delete command to scale down the local server.*
+*使用 delete 命令缩减本地服务器。*
 
 ```shell
 $ sealer delete \
@@ -50,10 +50,10 @@ $ sealer delete \
 $ sealer delete --masters 192.168.0.7-192.168.0.10 --nodes 192.168.0.11-192.168.0.13
 ```
 
-## Clean up the Kubernetes cluster
+## 清理 Kubernetes 集群
 
 ```shell
 sealer delete --all
 ```
 
-Sealer will also remove infrastructure resources if you use cloud mod.
+如果您使用cloud模式，Sealer 还将删除基础设施资源。

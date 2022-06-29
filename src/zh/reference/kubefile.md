@@ -1,65 +1,61 @@
-# Kubefile instruction
+# Kubefile指令
 
-A `Kubefile` is a text document that contains all the commands a user could call on the command line to assemble an
-image.We can use the `Kubefile` to define a cluster image that can be shared and deployed offline. a `Kubefile` just
-like `Dockerfile` which contains the build instructions to define the specific cluster.
+`Kubefile`是一个文本文档，其中包含用户可以在命令行上调用以组装映像的所有命令。我们可以使用 `Kubefile` 定义可以离线共享和部署的集群映像。
+一个 `Kubefile` 就像 `Dockerfile` 一样，它包含定义特定集群的构建指令。
 
-## FROM instruction
+## FROM指令
 
-The `FROM` instruction defines which base image you want reference, and the first instruction in Kubefile must be the
-FROM instruction. Registry authentication information is required if the base image is a private image. By the way
-official base images are available from the Sealer community.
+`FROM` 指令定义了你想要引用的基础镜像，并且 Kubefile 中的第一条指令必须是 FROM 指令。
+如果基础镜像是私有镜像，则需要registry认证信息。并且，Sealer社区提供了官方基础镜像。
 
 > command format：FROM {your base image name}
 
-USAGE：
+用法：
 
-For example ,use the base image `kubernetes:v1.19.8` which provided by the Sealer community to build a new cloud image.
+例如，使用Sealer社区提供的基础镜像 `kubernetes:v1.19.8` 构建新的集群镜像。
 
 `FROM registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8`
 
-## COPY instruction
+## COPY指令
 
-The `COPY` instruction used to copy the contents from the context path such as file or directory to the `rootfs`. all
-the cloud image is based on the [rootfs](../../api/cloudrootfs.md), and the default src path is
-the `rootfs` .If the specified destination directory does not exist, sealer will create it automatically.
+`COPY` 指令用于将文件或目录等上下文路径中的内容复制到 `rootfs`。
+所有的云镜像都是基于[rootfs](....apicloudrootfs.md)，默认src路径是`rootfs`。
+如果指定的目标目录不存在，sealer会自动创建。
 
-> command format：COPY {src dest}
+> 命令格式：COPY {src dest}
 
-USAGE：
+用法：
 
-For example , copy `mysql.yaml`to`rootfs/mysql.yaml`
+例如, copy `mysql.yaml`to`rootfs/mysql.yaml`
 
 `COPY mysql.yaml .`
 
-For example , copy directory `apollo` to `rootfs/charts/apollo`
+例如, 将目录“apollo”复制到`rootfs/charts/apollo`
 
 `COPY apollo charts`
 
-## RUN instruction
+## RUN指令
 
-The RUN instruction will execute any commands in a new layer on top of the current image and commit the results. The
-resulting committed image will be used for the next step in the `Kubefile`.
+RUN指令将在当前图像之上的新层中执行任何命令并提交结果。
+生成的提交图像将用于“Kubefile”中的下一步。
 
-> command format：RUN {command args ...}
+> 命令格式：RUN {command args ...}
 
-USAGE：
+用法：
 
-For example ,Using `RUN` instruction to execute a commands that download kubernetes dashboard.
+例如,使用 `RUN` 指令执行下载 kubernetes dashboard。
 
 `RUN wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml`
 
-### CMD instruction
+### CMD指令
 
-The format of CMD instruction is similar to RUN instruction, and also will execute any commands in a new layer. However,
-the CMD command will be executed when the cluster is started . it is generally used to start applications or configure
-the cluster. and it is different with `Dockerfile` CMD ,If you list more than one CMD in a `Kubefile` ,then all of them
-will take effect.
+CMD指令的格式与RUN指令类似，也会在新的一层执行任何命令。但是，CMD命令会在集群启动时执行。
+它通常用于启动应用程序或配置集群。与`Dockerfile` CMD不同，如果在`Kubefile`中列出多个CMD，则所有CMD都会生效。
 
-> command format：CMD {command args ...}
+> 命令格式：CMD {command args ...}
 
-USAGE：
+用法：
 
-For example ,Using `CMD` instruction to execute a commands that apply the kubernetes dashboard yaml.
+例如,使用 `CMD` 指令执行应用kubernetes dashboard yaml的命令。
 
 `CMD kubectl apply -f recommended.yaml`

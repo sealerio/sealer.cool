@@ -1,23 +1,23 @@
-# GPU CloudImage
+# GPU集群镜像
 
-## Preparation
+## 准备
 
-1. Install nvidia driver on your host.
-2. Install the latest version of sealer on your host.
+1. 在您的主机上安装nvidia驱动程序。
+2. 在您的主机上安装最新版本的sealer。
 
-## How to build it
+## 如何构建它
 
-We provide GPU base image in our official registry
-named `registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes-nvidia:v1.19.8`.you can use is directly. meanwhile, we
-provide the build context in the applications' directory. it can be adjusted it per your request.
+我们在官方注册表中提供GPU基础镜像
+名字 `registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes-nvidia:v1.19.8`。
+你可以直接使用它。同时，我们在应用程序目录中提供构建上下文，它可以根据您的要求进行调整。
 
-Run below command to rebuild it.
+运行下面的命令来重建它。
 
 `sealer build -f Kubefile -t registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes-nvidia:v1.19.8 -m lite .`
 
-## How to apply it
+## 如何应用它
 
-1. Modify the Clusterfile according to your infra environment,here is the Clusterfile for example.
+1. 根据你的基础环境修改Clusterfile，这里以Clusterfile为例。
 
 ```yaml
 apiVersion: sealer.cloud/v2
@@ -35,11 +35,9 @@ spec:
       roles: [ node ]
 ```
 
-2. Run command `sealer apply -f Clusterfile` to apply the GPU cluster. it will take few minutes.
+2. 运行命令 `sealer apply -f Clusterfile` 应用GPU集群，这将需要几分钟。
 
-## How to check the result
+## 如何检查结果
 
-1. Check the pod status to run `kubectl get pods -n kube-system nvidia-device-plugin`, you can find the pod in Running
-   status.
-2. Get the node details to run `kubectl describe node`, if `nvidia.com/gpu` shows on 'Allocated resources' section,you
-   get a k8s cluster with GPU.
+1. 检查要运行的 pod 状态`kubectl get pods -n kube-system nvidia-device-plugin`, 你可以在Running中找到pod状态
+2. 获取要运行的节点详细信息`kubectl describe node`, if `nvidia.com/gpu`在“分配的资源”部分显示，您将获得一个带有GPU的k8s集群。

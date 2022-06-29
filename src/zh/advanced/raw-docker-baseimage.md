@@ -1,59 +1,61 @@
-# Raw docker BaseImage
+# Raw docker基础镜像
 
-## Motivations
+## 体系结构
 
-The existing base images mostly use customized docker, but many k8s clusters use raw docker as container runtime. So it's necessary to provide a base image with raw docker, this page is a guide of how to get a base image with raw docker.
+现有的基础镜像大多使用定制的 docker，但许多k8s集群使用原始docker作为容器运行时。所以有必要提供一个带有raw docker的基础镜像，这个页面是如何使用raw docker获取基础镜像的指南。
 
-## Use cases
+## 用例
 
-### How to use it
+### 怎样使用它
 
-We provide an official BaseImage which uses official raw docker as container runtime: `kubernetes-rawdocker:v1.19.8`. If you want to create a k8s cluster, you can use it directly as `sealer run` command's argument or write it into your Clusterfile. If you want to use it as the base image to build other images by `sealer build`, `FROM kubernetes-rawdocker:v1.19.8` should be the first line in your Kubefile.
+我们提供了一个官方的基础镜像，它使用官方的原始docker作为容器运行时：`kubernetes-rawdocker:v1.19.8`。如果你想创建一个k8s集群，你可以直接使用它作为 `sealer run` 命令的参数或者将它写入你的 Clusterfile。如果你想用它作为基础镜像通过`sealer build`构建其他镜像，`FROM kubernetes-rawdocker:v1.19.8`应该是你Kubefile的第一行。
 
-### How to build raw docker BaseImage
+### 怎样去构建raw docker基础镜像
 
-#### Step 1：choose a base image
+#### Step 1：选择基础图像
 
-Get an image which you will modify it later, you may think it as your base image. To demonstrate the workflow, I will use `kubernetes:v1.19.8`. You can get the same image by executing `sealer pull kubernetes:v1.19.8`.
+获取您稍后将对其进行修改的镜像，您可能会将其视为您的基础镜像。为了演示工作流程，我将使用 `kubernetes:v1.19.8`。你可以通过执行`sealer pull kubernetes:v1.19.8`得到相同的镜像。
 
-#### Step 2: find the layers you will use later
+#### Step 2: 找到稍后将使用的图层
 
-Find the image layer id by executing `sealer inspect kubernetes:v1.19.8`. There are four layers in this image, and you will only use two of them. The first one's id is `c1aa4aff818df1dd51bd4d28decda5fe695bea8a9ae6f63a8dd5541c7640b3d6`, it consist of bin files, config files, registry files, scripts and so on. (I will use {layer-id-1} to refer to it in the following. Actually, it's a sha256 string) The another one's id is `991491d3025bd1086754230eee1a04b328b3d737424f1e12f708d651e6d66860`, it consist of network component yaml files. (I will use {layer-id-2} to refer to it in the following. Actually, it's also a sha256 string)
+通过执行`sealer inspect kubernetes:v1.19.8`找到镜像层id。此镜像中有四层，您将只使用其中的两层。第一个的id是`c1aa4aff818df1dd51bd4d28decda5fe695bea8a9ae6f63a8dd5541c7640b3d6`，它由bin文件、配置文件、注册表文件、脚本等组成。（下面我用{layer-id-1}来指代，其实是一个sha256字符串）另外一个的id是`991491d3025bd1086754230eee1a04b328b3d737424f1e12f708d651e6d66860`，由网络组件yaml文件组成。（下面我会用{layer-id-2}来指代，其实也是一个sha256字符串）
 
-#### Step 3: get official raw docker
+#### Step 3: 获取官方raw docker
 
-Choose a raw docker binary version from `https://download.docker.com/linux/static/stable/x86_64/` if your machine is based on x86_64 architecture, and download it. (other architecture can be found at `https://download.docker.com/linux/static/stable/`)
+如果您的机器基于x86_64架构，请从 `https:download.docker.comlinuxstaticstablex86_64` 中选择一个原始docker二进制版本，然后下载它。（其他架构可以在`https:download.docker.comlinuxstaticstable`找到）
 
-#### Step 4: replace sealer hacked docker
+#### Step 4: 更换 sealer hacked docker
 
-Replace `/var/lib/sealer/data/overlay2/{layer-id-1}/cri/docker.tar.gz` with the file you download in step 3, Before replacement you should do some handles.  **Attention** that you should make sure after replacement the compressed file name and untarred working directory tree is same as before. In this case, you should untar the file you download in step 3, enter the `docker` directory and tar all files in this directory with an output file whose name is `docker.tar.gz`.
+将 `varlibsealerdataoverlay2{layer-id-1}cridocker.tar.gz` 替换为您在步骤3中下载的文件，在替换之前您应该做一些处理。注意替换后的压缩文件名和解压的工作目录树要确保和以前一样。在这种情况下，您应该解压您在第3步中下载的文件，进入 `docker` 目录并将该目录中的所有文件tar到一个名为 `docker.tar.gz` 的输出文件。
 
-#### Step 5: replace sealer hacked registry
+#### Step 5: 更换 sealer hacked registry
 
-Pull the official "registry" image and replace existing customized "registry" image at `/var/lib/sealer/data/overlay2/{layer-id-1}/images/registry.tar`. Firstly make sure raw docker have already installed, then execute `docker pull registry:2.7.1 && docker save -o registry.tar registry:2.7.1 && mv registry.tar /var/lib/sealer/data/overlay2/{layer-id-1}/images/registry.tar`.
+拉取官方“registry”镜像并替换`varlibsealerdataoverlay2{layer-id-1}imagesregistry.tar`中现有的自定义“registry”镜像。首先确保raw docker已经安装，然后执行 `docker pull registry:2.7.1 && docker save -o registry.tar registry:2.7.1 && mv registry.tar varlibsealerdataoverlay2{layer-id-1}imagesregistry.tar`。
 
-#### Step 6: modify daemon.json
+#### Step 6: 修改daemon.json
 
-Edit the file 'daemon.json' at `/var/lib/sealer/data/overlay2/{layer-id-1}/etc/`, delete the `mirror-registries` attribute.
+在 `varlibsealerdataoverlay2{layer-id-1}etc` 编辑文件 'daemon.json'，删除 `mirror-registries` 属性。
 
-#### Step 7: build raw docker alpine image
+#### Step 7: 构建raw docker alpine镜像
 
-Switch to directory `/var/lib/sealer/data/overlay2/{layer-id-1}/`, edit the `Kubefile` and make sure it's content is:
+切换到目录 `/var/lib/sealer/data/overlay2/{layer-id-1}/`, 编辑 `Kubefile` 并确保它的内容是：
 
 ```shell script
 FROM scratch
 COPY . .
 ```
 
-Then build image by execute `sealer build --mode lite -t kubernetes-rawdocker:v1.19.8-alpine .`.
+然后通过执行`sealer build --mode lite -t kubernetes-rawdocker:v1.19.8-alpine .`来构建镜像。
 
-#### Extension
+#### 扩展
 
-#### Step 8: add network components to alpine image
+#### Step 8: 将网络组件添加到alpine镜像
 
-Now the base image still need network components to make k8s clusters work well, here we provide a guide for adding calico as network components.
-First, create a `rawdockerBuild` directory as your build environment. Then you should move the file "tigera-operator.yaml" and the file "custom-resources.yaml" from `/var/lib/sealer/data/overlay2/{layer-id-2}/etc/` to `rawdockerBuild/etc`. After that you still need modify some contents in those two files to make sure the pods they create will pull docker images from your private registry, which will make your k8s clusters still work well in offline situations. In this case, firstly add a map-key value in "custom-resources.yaml", the key is `spec.registry` and the value is `sea.hub:5000`, secondly modify all docker image names in "tigera-operator.yaml" from `<registry>/<repository>/<imageName>:<imageTag>` to `sea.hub:5000/<repository>/<imageName>:<imageTag>`.
-Next create a `imageList` file at `rawdockerBuild` directory, with the following content:
+现在基础镜像还需要网络组件才能让k8s集群正常运行，这里我们提供一下添加calico作为网络组件的指南。
+首先，创建一个 `rawdockerBuild` 目录作为你的构建环境。然后你应该将文件“tigera-operator.yaml”和文件“custom-resources.yaml”从`varlibsealerdataoverlay2{layer-id-2}etc`移动到`rawdockerBuildetc`。
+之后，您仍然需要修改这两个文件中的一些内容，以确保它们创建的pod将从您的私有registry中提取docker镜像，这将使您的k8s集群在离线情况下仍然可以正常工作。
+在这种情况下，首先在“custom-resources.yaml”中添加一个map-key值，key为`spec.registry`，value为`sea.hub:5000`，然后修改“tigera-”中的所有docker镜像名称operator.yaml" 从 `<registry><repository><imageName>:<imageTag>` 到 `sea.hub:5000<repository><imageName>:<imageTag>`。
+接下来在 `rawdockerBuild` 目录下创建一个 `imageList` 文件，内容如下：
 
 - calico/cni:v3.19.1
 - calico/kube-controllers:v3.19.1
@@ -62,11 +64,11 @@ Next create a `imageList` file at `rawdockerBuild` directory, with the following
 - calico/typha:v3.19.1
 - tigrea/operator:v1.17.4
 
-They are all the images needed to create network components, make sure that the tag is consistent with declared in the yaml file "tigera-operator.yaml" and "custom-resources.yaml".
+它们都是创建网络组件所需的镜像，请确保标签与yaml文件“tigera-operator.yaml”和“custom-resources.yaml”中声明的一致。
 
-#### Step 9: build raw docker image
+#### Step 9: 构建raw docker镜像
 
-Switch to directory `rawdockerBuild`, create a `Kubefile` and make sure it's content is:
+切换到 `rawdockerBuild` 目录，创建一个 `Kubefile` 并确保其内容为:
 
 ```shell script
 FROM kubernetes-rawdocker:v1.19.8-alpine
@@ -75,4 +77,4 @@ COPY etc .
 CMD kubectl apply -f etc/tigera-operator.yaml && kubectl apply -f etc/custom-resources.yaml
 ```
 
-Then build image by execute `sealer build --mode lite -t kubernetes-rawdocker:v1.19.8 .`.
+然后通过执行构建镜像`sealer build --mode lite -t kubernetes-rawdocker:v1.19.8 .`.
