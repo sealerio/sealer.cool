@@ -1,6 +1,10 @@
 # 快速开始
 
 ## 使用sealer创建一个kubernetes集群
+::: tip
+在运行下面的脚本前，请先将各节点的`hostname`设置成不同名称。  
+详情：[kubectl get node only see the master](https://github.com/sealerio/sealer/issues/1458)
+:::
 
 ```shell script
 # 下载和安装sealer二进制
@@ -25,9 +29,17 @@ izm5ehdjw3kru84f0kq7rbz Ready <none> 18h v1.19.8
 
 ## 增加删除节点
 
+使用 join 命令扩展本地服务器。
+
 ```shell script
 sealer join --masters 192.168.0.2,192.168.0.3,192.168.0.4
 sealer join --nodes 192.168.0.5,192.168.0.6,192.168.0.7
+```
+
+使用 delete 命令缩减本地服务器。
+```shell script
+sealer delete --masters 192.168.0.2,192.168.0.3,192.168.0.4
+sealer delete --nodes 192.168.0.5,192.168.0.6,192.168.0.7
 ```
 
 ## 清理集群
