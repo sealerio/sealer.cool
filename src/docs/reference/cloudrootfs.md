@@ -1,6 +1,6 @@
 # What is CloudRootfs
 
-All the files witch run a kubernetes cluster needs.
+All the files which run a kubernetes cluster needs.
 
 Contains:
 
