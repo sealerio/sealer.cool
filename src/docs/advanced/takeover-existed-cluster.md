@@ -52,7 +52,7 @@ sealer upgrade --image kubernetes:v1.22.0
 > Scale
 
 ```shell script
-sealer join --node x.x.x.x
+sealer join --nodes x.x.x.x
 ```
 
 > Deploy a CloudImage into the cluster
