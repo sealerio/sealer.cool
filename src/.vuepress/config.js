@@ -23,6 +23,7 @@ enSideBar = {
                 children: [
                     'getting-started/introduction',
                     'getting-started/quick-start',
+<<<<<<< HEAD
                     'getting-started/run-cloudimage',
                     'getting-started/using-clusterfile',
                     'getting-started/build-cloudimage',
@@ -30,6 +31,48 @@ enSideBar = {
                     'getting-started/config',
                     'getting-started/plugin',
                     'getting-started/applications',
+=======
+                ]
+            },
+            {
+                title: 'Command Line',
+                collapsable: true,
+                children: [
+                    'command/sealer',
+                    'command/image/sealer_build',
+                    'command/image/sealer_images',
+                    'command/image/sealer_inspect',
+                    'command/image/sealer_load',
+                    'command/image/sealer_login',
+                    'command/image/sealer_logout',
+                    'command/image/sealer_manifest',
+                    'command/image/sealer_manifest_add',
+                    'command/image/sealer_manifest_create',
+                    'command/image/sealer_manifest_delete',
+                    'command/image/sealer_manifest_inspect',
+                    'command/image/sealer_manifest_push',
+                    'command/image/sealer_manifest_remove',
+                    'command/image/sealer_pull',
+                    'command/image/sealer_push',
+                    'command/image/sealer_rmi',
+                    'command/image/sealer_save',
+                    'command/image/sealer_tag',
+                    'command/cluster/sealer_cert',
+                    'command/cluster/sealer_delete',
+                    'command/cluster/sealer_join',
+                    'command/cluster/sealer_run-app',
+                    'command/cluster/sealer_run',
+                    'command/cluster/sealer_scale-up',
+                    'command/alpha/sealer_alpha_exec',
+                ]
+            },
+            {
+                title: 'Core Concept',
+                collapsable: true,
+                children: [
+                    'concept/kubefile',
+                    'concept/clusterfile',
+>>>>>>> cc66085 (add sealer cli)
                 ]
             },
             {
