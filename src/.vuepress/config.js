@@ -11,11 +11,78 @@ enSideBar = {
             ariLabel: 'version',
             items: [  //多级导航栏
                 {text: 'v0.8.6', link: '/v0.8.6/en/getting-started/introduction'},
-                {text: 'v0.9.0', link: '/docs/getting-started/introduction'}
+                {text: 'v0.9.0', link: '/docs/introduction/introduction'}
             ]
         },
     ],
     sidebar: {
+        '/docs/': [
+            {
+                title: 'Sealer Introduction',
+                collapsable: true,
+                children: [
+                    'introduction/introduction',
+                    'introduction/architecture',
+                ]
+            },
+            {
+                title: 'Getting Started',
+                collapsable: true,
+                children: [
+                    'getting-started/quick-start',
+                ]
+            },
+            {
+                title: 'Command Line',
+                collapsable: true,
+                children: [
+                    'command/sealer',
+                ]
+            },
+            {
+                title: 'Core Concept',
+                collapsable: true,
+                children: [
+                    'concept/kubefile',
+                    'concept/clusterfile',
+                ]
+            },
+            {
+                title: 'Advanced',
+                collapsable: true,
+                children: [
+                    'advanced/kubefile',
+                    'advanced/clusterfile',
+                    'advanced/env',
+                    'advanced/plugin',
+                    'advanced/config',
+                    'advanced/clusterimage',
+                ]
+            },
+            {
+                title: 'Contributing',
+                collapsable: true,
+                children: [
+                    'contributing/code-of-conduct',
+                    'contributing/contribute',
+                ]
+            },
+            {
+                title: 'Reference',
+                collapsable: true,
+                children: [
+                    'reference/buildah',
+                ]
+            },
+            {
+                title: 'Help',
+                collapsable: true,
+                children: [
+                    'help/contact',
+                    'help/faq',
+                ]
+            },
+        ],
         '/v0.8.6/en/': [
             {
                 title: 'Getting Started',
@@ -54,68 +121,6 @@ enSideBar = {
                 title: 'Reference',
                 collapsable: true,
                 children: [
-                    'reference/cli',
-                    'reference/cloudrootfs',
-                    'reference/clusterfile',
-                    'reference/kubefile',
-                ]
-            },
-            {
-                title: 'Contributing',
-                collapsable: true,
-                children: [
-                    'contributing/code-of-conduct',
-                    'contributing/contribute',
-                ]
-            },
-            {
-                title: 'Help',
-                collapsable: true,
-                children: [
-                    'help/contact',
-                    'help/faq',
-                ]
-            },
-        ],
-        '/docs/': [
-            {
-                title: 'Getting Started',
-                collapsable: true,
-                children: [
-                    'getting-started/introduction',
-                    'getting-started/quick-start',
-                    'getting-started/run-cloudimage',
-                    'getting-started/using-clusterfile',
-                    'getting-started/build-cloudimage',
-                    'getting-started/build-appimage',
-                    'getting-started/config',
-                    'getting-started/plugin',
-                    'getting-started/applications',
-                ]
-            },
-            {
-                title: 'Advanced',
-                collapsable: true,
-                children: [
-                    'advanced/architecture',
-                    'advanced/arm-cloudimage',
-                    'advanced/containerd-baseimage',
-                    'advanced/define-cloudimage',
-                    'advanced/develop-plugin',
-                    'advanced/gpu-cloudimage',
-                    'advanced/raw-docker-baseimage',
-                    'advanced/registry-configuration',
-                    'advanced/save-charts-package',
-                    'advanced/takeover-existed-cluster',
-                    'advanced/use-kyverno-baseimage',
-                    'advanced/use-sealer-in-container',
-                ]
-            },
-            {
-                title: 'Reference',
-                collapsable: true,
-                children: [
-                    'reference/cli',
                     'reference/cloudrootfs',
                     'reference/clusterfile',
                     'reference/kubefile',
@@ -186,7 +191,6 @@ zhSideBar = {
                 title: 'CLI&API',
                 collapsable: true,
                 children: [
-                    'reference/cli',
                     'reference/cloudrootfs',
                     'reference/clusterfile',
                     'reference/kubefile',
