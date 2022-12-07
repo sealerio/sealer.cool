@@ -3,7 +3,7 @@ home: true
 heroImage: "https://sealer.oss-cn-beijing.aliyuncs.com/website/logo.png"
 tagline: 把整个集群看成一台服务器，把kubernetes看成云操作系统，吸取docker设计精髓实现分布式软件镜像化构建、交付、运行
 actionText: 快速开始→
-actionLink: "/zh/getting-started/introduction"
+actionLink: "/v0.8.6/zh/getting-started/introduction"
 features:
 
 - title: 构建
