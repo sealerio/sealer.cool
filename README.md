@@ -20,4 +20,4 @@ npm install
 npm run dev
 ```
 
-npm will start local http server : http://localhost:8080
+npm will start local http server.
