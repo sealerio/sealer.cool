@@ -11,27 +11,25 @@ enSideBar = {
             ariLabel: 'version',
             items: [  //多级导航栏
                 {text: 'v0.8.6', link: '/v0.8.6/en/getting-started/introduction'},
-                {text: 'v0.9.0', link: '/docs/getting-started/introduction'}
+                {text: 'v0.9.0', link: '/docs/introduction/introduction'}
             ]
         },
     ],
     sidebar: {
-        '/v0.8.6/en/': [
+        '/docs/': [
+            {
+                title: 'Sealer Introduction',
+                collapsable: true,
+                children: [
+                    'introduction/introduction',
+                    'introduction/architecture',
+                ]
+            },
             {
                 title: 'Getting Started',
                 collapsable: true,
                 children: [
-                    'getting-started/introduction',
                     'getting-started/quick-start',
-<<<<<<< HEAD
-                    'getting-started/run-cloudimage',
-                    'getting-started/using-clusterfile',
-                    'getting-started/build-cloudimage',
-                    'getting-started/build-appimage',
-                    'getting-started/config',
-                    'getting-started/plugin',
-                    'getting-started/applications',
-=======
                 ]
             },
             {
@@ -39,31 +37,6 @@ enSideBar = {
                 collapsable: true,
                 children: [
                     'command/sealer',
-                    'command/image/sealer_build',
-                    'command/image/sealer_images',
-                    'command/image/sealer_inspect',
-                    'command/image/sealer_load',
-                    'command/image/sealer_login',
-                    'command/image/sealer_logout',
-                    'command/image/sealer_manifest',
-                    'command/image/sealer_manifest_add',
-                    'command/image/sealer_manifest_create',
-                    'command/image/sealer_manifest_delete',
-                    'command/image/sealer_manifest_inspect',
-                    'command/image/sealer_manifest_push',
-                    'command/image/sealer_manifest_remove',
-                    'command/image/sealer_pull',
-                    'command/image/sealer_push',
-                    'command/image/sealer_rmi',
-                    'command/image/sealer_save',
-                    'command/image/sealer_tag',
-                    'command/cluster/sealer_cert',
-                    'command/cluster/sealer_delete',
-                    'command/cluster/sealer_join',
-                    'command/cluster/sealer_run-app',
-                    'command/cluster/sealer_run',
-                    'command/cluster/sealer_scale-up',
-                    'command/alpha/sealer_alpha_exec',
                 ]
             },
             {
@@ -72,35 +45,18 @@ enSideBar = {
                 children: [
                     'concept/kubefile',
                     'concept/clusterfile',
->>>>>>> cc66085 (add sealer cli)
                 ]
             },
             {
                 title: 'Advanced',
                 collapsable: true,
                 children: [
-                    'advanced/architecture',
-                    'advanced/arm-cloudimage',
-                    'advanced/containerd-baseimage',
-                    'advanced/define-cloudimage',
-                    'advanced/develop-plugin',
-                    'advanced/gpu-cloudimage',
-                    'advanced/raw-docker-baseimage',
-                    'advanced/registry-configuration',
-                    'advanced/save-charts-package',
-                    'advanced/takeover-existed-cluster',
-                    'advanced/use-kyverno-baseimage',
-                    'advanced/use-sealer-in-container',
-                ]
-            },
-            {
-                title: 'Reference',
-                collapsable: true,
-                children: [
-                    'reference/cli',
-                    'reference/cloudrootfs',
-                    'reference/clusterfile',
-                    'reference/kubefile',
+                    'advanced/kubefile',
+                    'advanced/clusterfile',
+                    'advanced/env',
+                    'advanced/plugin',
+                    'advanced/config',
+                    'advanced/clusterimage',
                 ]
             },
             {
@@ -112,6 +68,13 @@ enSideBar = {
                 ]
             },
             {
+                title: 'Reference',
+                collapsable: true,
+                children: [
+                    'reference/buildah',
+                ]
+            },
+            {
                 title: 'Help',
                 collapsable: true,
                 children: [
@@ -120,7 +83,7 @@ enSideBar = {
                 ]
             },
         ],
-        '/docs/': [
+        '/v0.8.6/en/': [
             {
                 title: 'Getting Started',
                 collapsable: true,
@@ -158,7 +121,6 @@ enSideBar = {
                 title: 'Reference',
                 collapsable: true,
                 children: [
-                    'reference/cli',
                     'reference/cloudrootfs',
                     'reference/clusterfile',
                     'reference/kubefile',
@@ -229,7 +191,6 @@ zhSideBar = {
                 title: 'CLI&API',
                 collapsable: true,
                 children: [
-                    'reference/cli',
                     'reference/cloudrootfs',
                     'reference/clusterfile',
                     'reference/kubefile',
