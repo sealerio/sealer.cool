@@ -9,7 +9,7 @@ wget https://github.com/sealerio/sealer/releases/download/v0.8.5/sealer-v0.8.5-l
 ## Run a cluster on ARM platform
 
 ```shell script
-sealer run kubernetes:v1.19.8 --master 192.168.0.3 --passwd xxx
+sealer run kubernetes:v1.19.8 --masters 192.168.0.3 --passwd xxx
 ```
 
 ## Build an ARM cloud image
