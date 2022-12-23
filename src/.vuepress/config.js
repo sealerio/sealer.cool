@@ -18,7 +18,7 @@ enSideBar = {
     sidebar: {
         '/docs/': [
             {
-                title: 'Sealer Introduction',
+                title: 'Introduction',
                 collapsable: true,
                 children: [
                     'introduction/introduction',
@@ -30,20 +30,24 @@ enSideBar = {
                 collapsable: true,
                 children: [
                     'getting-started/quick-start',
+                    'getting-started/install-sealer',
                 ]
             },
             {
-                title: 'Command Line',
+                title: 'Commands',
                 collapsable: true,
                 children: [
                     'command/sealer',
+                    'command/sealer-build',
+                    'command/sealer-pull',
                 ]
             },
             {
-                title: 'Core Concept',
+                title: 'Concepts',
                 collapsable: true,
                 children: [
                     'concept/kubefile',
+                    'concept/sealer-image',
                     'concept/clusterfile',
                 ]
             },
@@ -51,12 +55,31 @@ enSideBar = {
                 title: 'Advanced',
                 collapsable: true,
                 children: [
-                    'advanced/kubefile',
-                    'advanced/clusterfile',
-                    'advanced/env',
-                    'advanced/plugin',
-                    'advanced/config',
-                    'advanced/clusterimage',
+                    'advanced/customize-cluster-image',
+                    'advanced/develop-plugin',
+                    'advanced/use-sealer-in-container',
+                ]
+            },
+            {
+                title: 'Find Sealer Images',
+                collapsable: true,
+                children: [
+                    'sealer-images/application-images',
+                    'sealer-images/cluster-images',
+                ]
+            },
+            {
+                title: 'Best Practices',
+                collapsable: true,
+                children: [
+                    'best-practices/intro',
+                ]
+            },
+            {
+                title: 'Reference',
+                collapsable: true,
+                children: [
+                    'reference/buildah',
                 ]
             },
             {
@@ -68,13 +91,6 @@ enSideBar = {
                 ]
             },
             {
-                title: 'Reference',
-                collapsable: true,
-                children: [
-                    'reference/buildah',
-                ]
-            },
-            {
                 title: 'Help',
                 collapsable: true,
                 children: [
@@ -82,6 +98,7 @@ enSideBar = {
                     'help/faq',
                 ]
             },
+            'release-notes/0.9.0',
         ],
         '/v0.8.6/en/': [
             {
