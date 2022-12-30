@@ -35,30 +35,57 @@ For example , copy directory `apollo` to `rootfs/charts/apollo`
 
 `COPY apollo charts`
 
-## RUN instruction
+## CMDS instruction
 
-The RUN instruction will execute any commands in a new layer on top of the current image and commit the results. The
-resulting committed image will be used for the next step in the `Kubefile`.
-
-> command format：RUN {command args ...}
-
-USAGE：
-
-For example ,Using `RUN` instruction to execute a commands that download kubernetes dashboard.
-
-`RUN wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml`
-
-### CMD instruction
-
-The format of CMD instruction is similar to RUN instruction, and also will execute any commands in a new layer. However,
-the CMD command will be executed when the cluster is started . it is generally used to start applications or configure
-the cluster. and it is different with `Dockerfile` CMD ,If you list more than one CMD in a `Kubefile` ,then all of them
-will take effect.
+The format of CMDS instruction will execute any commands in a new layer. The CMDS command will be executed when `sealer run` . it is generally used to start applications or configure
+the cluster. and it is the same with `Dockerfile` CMD , if there are multiple `CMDS` instructions in the `Kubefile`, only the last one takes effect.
+And it conflicts with `LAUNCH`, and only one of the two can exist.
 
 > command format：CMD {command args ...}
 
 USAGE：
 
-For example ,Using `CMD` instruction to execute a commands that apply the kubernetes dashboard yaml.
+For example ,Using `CMDS` instruction to execute a commands that apply the kubernetes dashboard yaml.
 
-`CMD kubectl apply -f recommended.yaml`
+`CMDS ["kubectl apply -f recommended.yaml","echo success"]`
+
+## APP instruction
+
+The `APP` instruction defines an app virtual object and specify the materials that needed to start an app,
+and finally we can define the running object in terms of the dimensions of the `APP` by `LAUNCH` instruction.
+For now, you can specify the type of material included:
+
++ Helm Chart
++ K8S YAML
++ Linux Shell
+
+> command format：APP {command args ...}
+
+USAGE：
+
+For example:
+
++ Using `APP` instruction to define a `mysql` app and it will use remote chart file `https://charts/mysq.tgz` to start it and the remote file will be auto downloaded.
+
+    `APP mysql https://charts/mysq.tgz`
+
++ Using `APP` instruction to define a `dashboard` app and it will use local k8s resource file `recommended.yaml` to start it.
+
+    `APP dashboard local://recommended.yaml`
+
++ Using `APP` instruction to define a `business` app and it will use local shell file `install.sh` to start it.
+
+    `APP business local://install.sh`
+
+## LAUNCH instruction
+
+The `LAUNCH` instruction specifies a list of apps to launch when sealer run. Only one `LAUNCH` instruction can be defined in the Kubefile.
+And it conflicts with `CMDS`, and only one of the two can exist.
+> command format：LAUNCH {command args ...}
+
+USAGE：
+
+For example ,Using `LAUNCH` instruction to start mysql and business apps defined by `APP` instruction.
+
+`LAUNCH ["mysql","business"]`
+
