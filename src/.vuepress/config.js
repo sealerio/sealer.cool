@@ -56,8 +56,6 @@ enSideBar = {
                 collapsable: true,
                 children: [
                     'advanced/customize-cluster-image',
-                    'advanced/develop-plugin',
-                    'advanced/use-sealer-in-container',
                 ]
             },
             {
