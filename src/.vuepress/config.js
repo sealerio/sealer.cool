@@ -38,8 +38,9 @@ enSideBar = {
                 collapsable: true,
                 children: [
                     'command/sealer',
-                    'command/sealer-build',
-                    'command/sealer-pull',
+                    'command/image/image',
+                    'command/cluster/cluster',
+                    'command/alpha/sealer_alpha',
                 ]
             },
             {
