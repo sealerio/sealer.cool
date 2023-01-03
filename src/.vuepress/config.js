@@ -167,7 +167,14 @@ zhSideBar = {
         {
             text: 'github',
             link: 'https://github.com/sealerio/sealer'
-        }
+        },
+        {
+            text: 'version',
+            ariLabel: 'version',
+            items: [  //多级导航栏
+                {text: 'v0.8.6', link: '/v0.8.6/zh/getting-started/introduction'},
+            ]
+        },
     ],
     sidebar: {
         '/v0.8.6/zh/': [
