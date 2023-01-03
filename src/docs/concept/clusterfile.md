@@ -101,7 +101,7 @@ type SubjectAltName struct {
 
 #### Apply a simple cluster by default
 
-create 3 masters and a node using cluster image `registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.22.15`
+create 3 masters and a node using cluster image `docker.io/sealerio/kubernetes:v1.22.15`
 
 ```yaml
 apiVersion: sealer.cloud/v2
@@ -109,7 +109,7 @@ kind: Cluster
 metadata:
   name: default-kubernetes-cluster
 spec:
-  image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.22.15
+  image: docker.io/sealerio/kubernetes:v1.22.15
   ssh:
     passwd: xxx
   hosts:
@@ -130,7 +130,7 @@ kind: Cluster
 metadata:
   name: default-kubernetes-cluster
 spec:
-  image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.22.15
+  image: docker.io/sealerio/kubernetes:v1.22.15
   ssh:
     passwd: xxx
     port: "2222"
@@ -171,7 +171,7 @@ spec:
         sealer: test
       roles:
         - node
-  image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.22.15
+  image: docker.io/sealerio/kubernetes:v1.22.15
   ssh:
     passwd: password
     pk: /root/.ssh/id_rsa
@@ -190,7 +190,7 @@ kind: Cluster
 metadata:
   name: default-kubernetes-cluster
 spec:
-  image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.22.15
+  image: docker.io/sealerio/kubernetes:v1.22.15
   ssh:
     passwd: xxx
   hosts:
@@ -269,7 +269,7 @@ spec:
       passwd: password123
       port: "22"
       user: root
-  image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.22.15
+  image: docker.io/sealerio/kubernetes:v1.22.15
 ```
 
 #### Using host ENV in Clusterfile
@@ -287,7 +287,7 @@ kind: Cluster
 metadata:
   name: my-cluster
 spec:
-  image: registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.22.15
+  image: docker.io/sealerio/kubernetes:v1.22.15
   env:
     - EtcdDevice=/dev/vdb # EtcdDevice is device for etcd, default is "", which will use system disk
     - StorageDevice=/dev/vdc # StorageDevice is device for kubelet and container daemon, default is "", which will use system disk

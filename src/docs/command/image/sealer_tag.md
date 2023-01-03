@@ -10,7 +10,7 @@ sealer tag [flags]
 
 ```
 
-  sealer tag kubernetes:v1.19.8 firstName secondName
+  sealer tag docker.io/sealerio/kubernetes:v1.22.15 firstName secondName
 
 ```
 
