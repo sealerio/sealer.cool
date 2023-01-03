@@ -63,24 +63,23 @@ enSideBar = {
                 title: 'Find Sealer Images',
                 collapsable: true,
                 children: [
-                    'sealer-images/application-images',
                     'sealer-images/cluster-images',
                 ]
             },
-            {
-                title: 'Best Practices',
-                collapsable: true,
-                children: [
-                    'best-practices/intro',
-                ]
-            },
-            {
-                title: 'Reference',
-                collapsable: true,
-                children: [
-                    'reference/buildah',
-                ]
-            },
+            // {
+            //     title: 'Best Practices',
+            //     collapsable: true,
+            //     children: [
+            //         'best-practices/intro',
+            //     ]
+            // },
+            // {
+            //     title: 'Reference',
+            //     collapsable: true,
+            //     children: [
+            //         'reference/buildah',
+            //     ]
+            // },
             {
                 title: 'Contributing',
                 collapsable: true,
@@ -97,7 +96,7 @@ enSideBar = {
                     'help/faq',
                 ]
             },
-            'release-notes/0.9.0',
+            // 'release-notes/0.9.0',
         ],
         '/v0.8.6/en/': [
             {
