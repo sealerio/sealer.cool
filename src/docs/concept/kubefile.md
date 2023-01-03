@@ -16,7 +16,7 @@ USAGE：
 
 For example ,use the base image `kubernetes:v1.19.8` which provided by the Sealer community to build a new cloud image.
 
-`FROM registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8`
+`FROM docker.io/sealerio/kubernetes:v1.22.15`
 
 ## COPY instruction
 

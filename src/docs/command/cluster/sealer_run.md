@@ -4,7 +4,7 @@ start to run a cluster from a Sealer Image
 
 ## Synopsis
 
-sealer run registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.19.8 --masters [arg] --nodes [arg]
+sealer run docker.io/sealerio/kubernetes:v1.22.15 --masters [arg] --nodes [arg]
 
 ```
 sealer run [flags]
@@ -18,7 +18,7 @@ run cluster by Clusterfile:
   sealer run -f Clusterfile
 
 run cluster by CLI flags:
-  sealer run registry.cn-qingdao.aliyuncs.com/sealer-io/kubernetes:v1.22.4 -m 172.28.80.01 -n 172.28.80.02 -p Sealer123
+  sealer run docker.io/sealerio/kubernetes:v1.22.15 -m 172.28.80.01 -n 172.28.80.02 -p Sealer123
 
 run app image:
   sealer run localhost/nginx:v1

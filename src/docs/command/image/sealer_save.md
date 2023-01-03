@@ -14,9 +14,9 @@ sealer save [flags]
 
 ```
 
-save kubernetes:v1.19.8 image to kubernetes.tar file:
+save kubernetes:v1 image to kubernetes.tar file:
 
-  sealer save -o kubernetes.tar kubernetes:v1.19.8
+  sealer save -o kubernetes.tar kubernetes:v1
 ```
 
 ## Options
