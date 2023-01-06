@@ -8,7 +8,7 @@ The Cluster module implements the desired state of cluster through Clusterfile a
 
 ## Image module
 
-![](https://user-images.githubusercontent.com/83740799/210050287-487d3255-96e8-4030-bbff-a0134b1d18bb.png)
+![](../../../attachment/images/image-arch.png)
 
 ### Build Engine
 
