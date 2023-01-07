@@ -37,9 +37,16 @@ For example , copy directory `apollo` to `rootfs/charts/apollo`
 
 ## CMDS instruction
 
-The format of CMDS instruction will execute any commands in a new layer. The CMDS command will be executed when `sealer run` . it is generally used to start applications or configure
-the cluster. and it is the same with `Dockerfile` CMD , if there are multiple `CMDS` instructions in the `Kubefile`, only the last one takes effect.
-And it conflicts with `LAUNCH`, and only one of the two can exist.
+> NOTE: `LAUNCH` instruction is more recommended than `CMDS`.
+
+The format of CMDS instruction will execute any commands in a new layer. The CMDS command will be executed when `sealer run` .
+It is generally used to start applications or configure the cluster.
+
+And there are some points that require special attention:
+
++ Just like with `Dockerfile` CMD , if there are multiple `CMDS` instructions in the `Kubefile`, only the last one takes effect.
++ The `CMDS` of the parent image will not be inherited, and you need to redefine it in the child image if you need to have it set.
++ The `CMDS` instruction and the `LAUNCH` instruction are in conflict, and only one of them can exist.
 
 > command format：CMD {command args ...}
 
@@ -80,7 +87,12 @@ For example:
 ## LAUNCH instruction
 
 The `LAUNCH` instruction specifies a list of apps to launch when sealer run. Only one `LAUNCH` instruction can be defined in the Kubefile.
-And it conflicts with `CMDS`, and only one of the two can exist.
+
+And there are some points that require special attention:
+
++ The `LAUNCH` of the parent image will not be inherited, and you need to redefine it in the child image if you need to have it set.
++ The `LAUNCH` instruction and the `CMDS` instruction are in conflict, and only one of them can exist.
+
 > command format：LAUNCH {command args ...}
 
 USAGE：
