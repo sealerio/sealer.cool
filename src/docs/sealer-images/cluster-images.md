@@ -4,11 +4,14 @@
 
 * Officially
 
-|                 v0.9.0                  |                  Arch                   |                                                   OS                                                |              Network plugins            |
-| :-------------------------------------: | :-------------------------------------: | :-------------------------------------------------------------------------------------------------: | :-------------------------------------: |
-| docker.io/sealerio/kubernetes:v1.18.3   |                   x86                   |     CentOS/RHEL 7.5<br>CentOS/RHEL 7.6<br>CentOS/RHEL 7.7<br>CentOS/RHEL 7.8<br>CentOS/RHEL 7.9     |                 calico                  |
-| docker.io/sealerio/kubernetes:v1.20.4   |                   x86                   |     CentOS/RHEL 7.5<br>CentOS/RHEL 7.6<br>CentOS/RHEL 7.7<br>CentOS/RHEL 7.8<br>CentOS/RHEL 7.9     |                 calico                  |
-| docker.io/sealerio/kubernetes:v1.22.15  |                   x86                   |     CentOS/RHEL 7.5<br>CentOS/RHEL 7.6<br>CentOS/RHEL 7.7<br>CentOS/RHEL 7.8<br>CentOS/RHEL 7.9     |                 calico                  |
+|                    v0.9.0                     |                  Arch                   |                                                   OS                                                |              Network plugins            |
+| :-------------------------------------------: | :-------------------------------------: | :-------------------------------------------------------------------------------------------------: | :-------------------------------------: |
+| docker.io/sealerio/kubernetes:v1.18.3         |                   x86                   |     CentOS/RHEL 7.5<br>CentOS/RHEL 7.6<br>CentOS/RHEL 7.7<br>CentOS/RHEL 7.8<br>CentOS/RHEL 7.9     |                 calico                  |
+| docker.io/sealerio/kubernetes:v1.20.4         |                   x86                   |     CentOS/RHEL 7.5<br>CentOS/RHEL 7.6<br>CentOS/RHEL 7.7<br>CentOS/RHEL 7.8<br>CentOS/RHEL 7.9     |                 calico                  |
+| docker.io/sealerio/kubernetes:v1.22.15        |                   x86                   |     CentOS/RHEL 7.5<br>CentOS/RHEL 7.6<br>CentOS/RHEL 7.7<br>CentOS/RHEL 7.8<br>CentOS/RHEL 7.9     |                 calico                  |
+| docker.io/sealerio/kubernetes-arm64:v1.18.3   |                  arm64                  |     CentOS/RHEL 7.5<br>CentOS/RHEL 7.6<br>CentOS/RHEL 7.7<br>CentOS/RHEL 7.8<br>CentOS/RHEL 7.9     |                 calico                  |
+| docker.io/sealerio/kubernetes-arm64:v1.20.4   |                  arm64                  |     CentOS/RHEL 7.5<br>CentOS/RHEL 7.6<br>CentOS/RHEL 7.7<br>CentOS/RHEL 7.8<br>CentOS/RHEL 7.9     |                 calico                  |
+| docker.io/sealerio/kubernetes-arm64:v1.22.15  |                  arm64                  |     CentOS/RHEL 7.5<br>CentOS/RHEL 7.6<br>CentOS/RHEL 7.7<br>CentOS/RHEL 7.8<br>CentOS/RHEL 7.9     |                 calico                  |
 
 * Best practices [@ackdistro](https://github.com/AliyunContainerService/ackdistro/blob/main/docs/user-guide/getting-started_zh.md)
 
