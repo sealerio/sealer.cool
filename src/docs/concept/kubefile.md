@@ -72,9 +72,13 @@ USAGE：
 
 For example:
 
-+ Using `APP` instruction to define a `mysql` app and it will use remote chart file `https://charts/mysq.tgz` to start it and the remote file will be auto downloaded.
++ Using `APP` instruction to define a `mysql` app and it will use local chart dir `local://mysql/` to start it.
 
-    `APP mysql https://charts/mysq.tgz`
+  `APP mysql local://mysql/`
+
++ Using `APP` instruction to define a `dashboard` app and it will use [remote k8s resource file](https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml) to start it and the remote file will be auto downloaded.
+
+    `APP dashboard https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml`
 
 + Using `APP` instruction to define a `dashboard` app and it will use local k8s resource file `recommended.yaml` to start it.
 
