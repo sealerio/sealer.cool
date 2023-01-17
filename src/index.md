@@ -3,7 +3,7 @@ home: true
 heroImage: "https://sealer.oss-cn-beijing.aliyuncs.com/website/logo.png"
 tagline: Distributed Applications Build&Share&Run
 actionText: Getting Started →
-actionLink: "/v0.9.1/introduction/introduction"
+actionLink: "/docs/introduction/introduction"
 features:
 
 - title: Build
