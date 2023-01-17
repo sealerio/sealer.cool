@@ -11,13 +11,13 @@ enSideBar = {
             ariLabel: 'version',
             items: [  //多级导航栏
                 {text: 'v0.8.6', link: '/v0.8.6/en/getting-started/introduction'},
-                {text: 'v0.9.0', link: '/docs/introduction/introduction'},
-                {text: 'v0.9.1', link: '/v0.9.1/introduction/introduction'}
+                {text: 'v0.9.0', link: '/v0.9.0/introduction/introduction'},
+                {text: 'v0.9.1', link: '/docs/introduction/introduction'},
             ]
         },
     ],
     sidebar: {
-        '/v0.9.1/': [
+        '/docs/': [
             {
                 title: 'Introduction',
                 collapsable: true,
@@ -99,7 +99,7 @@ enSideBar = {
             },
             // 'release-notes/0.9.0',
         ],
-        '/docs/': [
+        '/v0.9.0/': [
             {
                 title: 'Introduction',
                 collapsable: true,
