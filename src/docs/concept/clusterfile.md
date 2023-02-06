@@ -471,3 +471,154 @@ spec:
     kubectl annotate storageclass yoda-lvm-default snapshot.storage.kubernetes.io/is-default-class="true" --overwrite
     kubectl annotate storageclass yoda-lvm-default storageclass.kubernetes.io/is-default-class="true" --overwrite
 ```
+
+## Application API
+
+### Application Spec
+
+ApplicationSpec defines the desired state of Application
+
+```yaml
+type ApplicationSpec struct {
+  //Cmds raw command line which has the highest priority, is mutually exclusive with the AppNames parameter
+  // it could be overwritten from ClusterSpec.CMD and cli flags, and it is not required.
+  Cmds []string `json:"cmds"`
+
+  //LaunchApps This field allows user to specify the app names they want to launch.
+  // it could be overwritten from ClusterSpec.APPNames and cli flags.
+  LaunchApps []string `json:"launchApps,omitempty"`
+
+  // Configs Additional configurations for the specified app
+  //it will override the default launch command and delete command, as well as the corresponding app files.
+  Configs []ApplicationConfig `json:"configs,omitempty"`
+}
+
+type ApplicationConfig struct {
+  // the AppName
+  Name string `json:"name,omitempty"`
+
+  // app Launch customization
+  Launch *Launch `json:"launch,omitempty"`
+}
+
+type Launch struct {
+  // Cmds raw cmds support, not required, exclusive with app type.
+  Cmds []string `json:"cmds,omitempty"`
+}
+
+```
+
+### Use cases
+
+#### overwrite image launch cmds
+
+```yaml
+apiVersion: sealer.io/v2
+kind: Application
+metadata:
+  name: my-apps
+spec:
+  cmds:
+    - kubectl apply -f ns.yaml
+    - kubectl apply -f nginx.yaml
+---
+apiVersion: sealer.io/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  hosts:
+    - ips:
+        - 172.16.83.189
+      roles:
+        - master
+      ssh: { }
+  image: my-app:v1
+  ssh:
+    passwd: "password"
+    pk: /root/.ssh/id_rsa
+    port: "22"
+    user: root
+```
+
+`sealer run -f Clusterfile.yaml`
+
+this will only execute `ApplicationSpec.Cmds`: "kubectl apply -f ns.yaml" and "kubectl apply -f nginx.yaml".
+
+#### overwrite image launch apps
+
+```yaml
+apiVersion: sealer.io/v2
+kind: Application
+metadata:
+  name: my-apps
+spec:
+  launchApps:
+    - app1
+    - app2
+---
+apiVersion: sealer.io/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  hosts:
+    - ips:
+        - 172.16.83.189
+      roles:
+        - master
+      ssh: { }
+  image: my-app:v1
+  ssh:
+    passwd: "password"
+    pk: /root/.ssh/id_rsa
+    port: "22"
+    user: root
+```
+
+`sealer run -f Clusterfile.yaml`
+
+this will only launch two apps with its default launch cmds defined from kubefile: "app1","app2"
+
+#### overwrite app launch apps
+
+```yaml
+apiVersion: sealer.io/v2
+kind: Application
+metadata:
+  name: my-apps
+spec:
+  launchApps:
+    - app1
+    - app2
+  configs:
+    - name: app2
+      launch:
+        cmds:
+          - kubectl apply -f app2.yaml
+---
+apiVersion: sealer.io/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  hosts:
+    - ips:
+        - 172.16.83.189
+      roles:
+        - master
+      ssh: { }
+  image: my-app:v1
+  ssh:
+    passwd: "password"
+    pk: /root/.ssh/id_rsa
+    port: "22"
+    user: root
+```
+
+`sealer run -f Clusterfile.yaml`
+
+this will only launch two apps ("app1","app2"):
+
+* for "app1": use its default launch cmds defined from kubefile.
+* for "app2": overwrite its default launch cmds as "kubectl apply -f app2.yaml".
