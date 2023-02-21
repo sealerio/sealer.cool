@@ -411,6 +411,8 @@ type PluginSpec struct {
 3. for `PluginSpec.Scope`: plugin`s scope, it is usually the role name, support use '|' to specify multiple scopes.
 4. for `PluginSpec.Action`: phase of this plugin will run. below is the phase list we currently supported.
 
+plugin will be executed by `PluginSpec.Name` in alphabetical order at the same stage.
+
 The following is a detailed introduction for plugin action.
 
 | action name | action scope | explanation |
