@@ -501,6 +501,8 @@ type ApplicationConfig struct {
 
   // app Launch customization
   Launch *Launch `json:"launch,omitempty"`
+
+  Files []AppFile `json:"files,omitempty"`
 }
 
 type Launch struct {
@@ -508,6 +510,17 @@ type Launch struct {
   Cmds []string `json:"cmds,omitempty"`
 }
 
+type AppFile struct {
+  // Path represents the path to write the Values, required.
+  Path string `json:"path,omitempty"`
+
+  // Enumeration value is "merge", "overwrite".
+  Strategy Strategy `json:"strategy,omitempty"`
+
+  // Data real app launch need.
+  // it could be raw content, yaml data, yaml section data, key-value pairs, and so on.
+  Data string `json:"data,omitempty"`
+}
 ```
 
 ### Use cases
@@ -624,3 +637,113 @@ this will only launch two apps ("app1","app2"):
 
 * for "app1": use its default launch cmds defined from kubefile.
 * for "app2": overwrite its default launch cmds as "kubectl apply -f app2.yaml".
+
+#### overwrite app files
+
+currently, we support below strategy for app modification.
+
+* "overwrite": overwrite strategy will overwrite the FilePath with the Data.
+* "merge": merge strategy will merge the FilePath with the Data, and only yaml files format are supported.
+
+example:
+
+```yaml
+apiVersion: sealer.io/v2
+kind: Application
+metadata:
+  name: my-apps
+spec:
+  launchApps:
+    - nginx
+    - yamlapp
+    - mixedapp
+  configs:
+    - name: mixedapp
+      files:
+        - path: rediscert
+          strategy: "overwrite"
+          data: |
+            redis-user: root
+            redis-passwd: xxx
+    - name: yamlapp
+      files:
+        - path: merge.yaml
+          strategy: "merge"
+          data: |
+            data:
+              test-key: test-key
+            metadata:
+               namespace: test-namespace
+---
+apiVersion: sealer.io/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  hosts:
+    - ips:
+        - 172.16.26.162
+      roles:
+        - master
+      ssh: {}
+  image: abc:v1
+  ssh:
+    passwd: xxxxxx
+    pk: /root/.ssh/id_rsa
+    port: "22"
+    user: root
+```
+
+then we can apply this application config through `sealer apply`.
+
+for "mixedapp", overwrite data to "rediscert" file:
+
+```yaml
+[root@iZbp1chh98quny8r8r71bhZ]# cat /var/lib/sealer/data/my-cluster/rootfs/application/apps/mixedapp/rediscert
+redis-user: root
+redis-passwd: xxx
+```
+
+for "yamlapp", will merge data to "merge.yaml" file:
+
+before:
+
+```yaml
+[root@iZbp1chh98quny8r8r71bhZ]# cat merge.yaml
+apiVersion: v1
+data:
+  key1: myConfigMap1
+kind: ConfigMap
+metadata:
+  name: myConfigMap1
+---
+apiVersion: v1
+data:
+  key2: myConfigMap2
+kind: ConfigMap
+metadata:
+  name: myConfigMap2
+```
+
+after:
+
+```yaml
+[root@iZbp1chh98quny8r8r71bhZ]# cat /var/lib/sealer/data/my-cluster/rootfs/application/apps/yamlapp/merge.yaml
+apiVersion: v1
+data:
+    key1: myConfigMap1
+    test-key: test-key
+kind: ConfigMap
+metadata:
+    name: myConfigMap1
+    namespace: test-namespace
+---
+apiVersion: v1
+data:
+    key2: myConfigMap2
+    test-key: test-key
+kind: ConfigMap
+metadata:
+    name: myConfigMap2
+    namespace: test-namespace
+```
