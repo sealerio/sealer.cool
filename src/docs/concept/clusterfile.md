@@ -427,6 +427,8 @@ The following is a detailed introduction for plugin action.
 | post-uninstall | master0 | will run after uninstall cluster  |
 | pre-scaleup | master0 | will run before scaleup cluster |
 | post-scaleup | master0 | will run after scaleup cluster  |
+| upgrade-host | cluster host | will run before upgrade cluster  |
+| upgrade | master0 | will run for upgrading cluster  |
 
 ### Use cases
 
@@ -472,6 +474,25 @@ spec:
     # set default storageclass and snapshot
     kubectl annotate storageclass yoda-lvm-default snapshot.storage.kubernetes.io/is-default-class="true" --overwrite
     kubectl annotate storageclass yoda-lvm-default storageclass.kubernetes.io/is-default-class="true" --overwrite
+```
+
+#### Do the actual upgrade work when upgrading the cluster
+
+use `upgrade` to upgrade cluster kubernetes version.
+
+```yaml
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Plugin
+metadata:
+  name: upgrade
+spec:
+  type: SHELL
+  action: upgrade
+  data: |
+    set -x
+    # sealer won't provide specific upgrade capabilities, only the entrance.
+    # you can do the actual upgrade work in your own upgrade shell.
+    bash scripts/upgrade.sh
 ```
 
 ## Application API
