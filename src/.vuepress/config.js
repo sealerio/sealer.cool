@@ -11,7 +11,8 @@ enSideBar = {
             ariLabel: 'version',
             items: [  //多级导航栏
                 {text: 'v0.8.6', link: '/v0.8.6/en/getting-started/introduction'},
-                {text: 'v0.9.0', link: '/docs/introduction/introduction'}
+                {text: 'v0.9.0', link: '/v0.9.0/introduction/introduction'},
+                {text: 'v0.9.1', link: '/docs/introduction/introduction'},
             ]
         },
     ],
@@ -95,6 +96,88 @@ enSideBar = {
                     'help/contact',
                     'help/faq',
                     'help/sudos',
+                ]
+            },
+            // 'release-notes/0.9.0',
+        ],
+        '/v0.9.0/': [
+            {
+                title: 'Introduction',
+                collapsable: true,
+                children: [
+                    'introduction/introduction',
+                    'introduction/architecture',
+                ]
+            },
+            {
+                title: 'Getting Started',
+                collapsable: true,
+                children: [
+                    'getting-started/quick-start',
+                    'getting-started/install-sealer',
+                ]
+            },
+            {
+                title: 'Commands',
+                collapsable: true,
+                children: [
+                    'command/sealer',
+                    'command/image/image',
+                    'command/cluster/cluster',
+                    'command/alpha/sealer_alpha',
+                ]
+            },
+            {
+                title: 'Concepts',
+                collapsable: true,
+                children: [
+                    'concept/kubefile',
+                    'concept/sealer-image',
+                    'concept/clusterfile',
+                ]
+            },
+            {
+                title: 'Advanced',
+                collapsable: true,
+                children: [
+                    'advanced/customize-cluster-image',
+                ]
+            },
+            {
+                title: 'Find Sealer Images',
+                collapsable: true,
+                children: [
+                    'sealer-images/cluster-images',
+                ]
+            },
+            // {
+            //     title: 'Best Practices',
+            //     collapsable: true,
+            //     children: [
+            //         'best-practices/intro',
+            //     ]
+            // },
+            // {
+            //     title: 'Reference',
+            //     collapsable: true,
+            //     children: [
+            //         'reference/buildah',
+            //     ]
+            // },
+            {
+                title: 'Contributing',
+                collapsable: true,
+                children: [
+                    'contributing/code-of-conduct',
+                    'contributing/contribute',
+                ]
+            },
+            {
+                title: 'Help',
+                collapsable: true,
+                children: [
+                    'help/contact',
+                    'help/faq',
                 ]
             },
             // 'release-notes/0.9.0',
