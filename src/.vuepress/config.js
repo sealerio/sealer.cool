@@ -58,7 +58,7 @@ enSideBar = {
                 collapsable: true,
                 children: [
                     'advanced/customize-cluster-image',
-                    'advanced/use-sealer-rootless',
+                    'advanced/sealer-run-rootless',
                 ]
             },
             {
@@ -141,6 +141,7 @@ enSideBar = {
                 collapsable: true,
                 children: [
                     'advanced/customize-cluster-image',
+                    'advanced/sealer-run-rootless',
                 ]
             },
             {
