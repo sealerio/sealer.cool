@@ -58,6 +58,7 @@ enSideBar = {
                 collapsable: true,
                 children: [
                     'advanced/customize-cluster-image',
+                    'advanced/use-sealer-rootless',
                 ]
             },
             {
@@ -140,6 +141,7 @@ enSideBar = {
                 collapsable: true,
                 children: [
                     'advanced/customize-cluster-image',
+                    'advanced/use-sealer-rootless',
                 ]
             },
             {
@@ -239,7 +241,6 @@ enSideBar = {
                 children: [
                     'help/contact',
                     'help/faq',
-                    'help/sudos',
                 ]
             },
         ],
@@ -317,7 +318,6 @@ zhSideBar = {
                 children: [
                     'help/contact',
                     'help/faq',
-                    'help/sudos',
                 ]
             },
         ],
