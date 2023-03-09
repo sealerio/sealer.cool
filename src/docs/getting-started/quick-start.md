@@ -98,3 +98,4 @@ sealer delete -a
 + [Kubefile](../concept/kubefile.md)
 + [Sealer Image](../concept/sealer-image.md)
 + [Sealer Cluster Image List](../sealer-images/cluster-images.md)
++ [Running sealer Node Components as a Non-root User](../advanced/use-sealer-rootless.md)
