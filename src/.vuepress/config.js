@@ -58,6 +58,7 @@ enSideBar = {
                 collapsable: true,
                 children: [
                     'advanced/customize-cluster-image',
+                    'advanced/run-with-clusterfile',
                 ]
             },
             {
