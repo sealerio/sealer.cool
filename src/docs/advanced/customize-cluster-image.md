@@ -2,8 +2,6 @@
 
 ## Customize the basefs
 
-Build image file context [@basefs](https://github.com/sealerio/basefs)
-
 All the files which run a kubernetes cluster needs.
 
 Contains:
@@ -478,3 +476,9 @@ build:
 ```shell
 sealer build -f Kubefile -t my-k0s:1.24.10 .
 ```
+
+## Best practices
+
+* Project address: [@basefs](https://github.com/sealerio/basefs)
+
+* Customize auto-build documentation: [@auto-build-docs](https://github.com/sealerio/basefs/blob/main/context/README.md)
