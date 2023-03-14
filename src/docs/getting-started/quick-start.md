@@ -74,8 +74,6 @@ Finally, run the following command to build the app image:
 sealer build -f Kubefile -t sealer-io/nginx:latest --type app-installer
 ```
 
-
-
 ## Run the app image
 
 To run the app image, use the following command:
@@ -90,8 +88,6 @@ You can check the pod by running the following command:
 kubectl get pod -A
 ```
 
-
-
 ## Push the app image to the registry
 
 To push the app image to the registry, use the following command:
@@ -103,8 +99,6 @@ sealer push {registryDomain}/sealer-io/nginx:latest
 
 You can push the app image to Docker Hub, Ali ACR, or Harbor.
 
-
-
 ## Clean the cluster
 
 If you want to clean the cluster, run the following command:
@@ -114,8 +108,6 @@ sealer delete -a
 ```
 
 Please note that some information of the basic settings will be written to the cluster and stored in `/root/.sealer/Clusterfile` locally.
-
-
 
 ## SEE ALSO
 
