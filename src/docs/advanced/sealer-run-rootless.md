@@ -19,7 +19,7 @@ This will fix the remote read permission issue.
 Before running Sealer in the cluster, you need to assign passwordless login permissions to the users on **all nodes**. You can edit the `/etc/sudoers` file to achieve this purpose. The file contains sudo user and group rules that allow specific users (like sealer) or groups to run commands as a superuser while executing the commands.
 
 ```bash
-sealer ALL=(ALL) NOPASSWD: ALL 
+sealer ALL=(ALL) NOPASSWD: ALL
 ```
 
 This will allow the user named sealer to run commands as a superuser without entering a password.
