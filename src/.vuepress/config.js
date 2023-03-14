@@ -60,6 +60,7 @@ enSideBar = {
                     'advanced/customize-cluster-image',
                     'advanced/use-sealer-image-offline',
                     'advanced/run-with-clusterfile',
+                    'advanced/sealer-run-rootless',
                 ]
             },
             {
@@ -97,7 +98,6 @@ enSideBar = {
                 children: [
                     'help/contact',
                     'help/faq',
-                    'help/sudos',
                 ]
             },
             // 'release-notes/0.9.0',
@@ -241,7 +241,6 @@ enSideBar = {
                 children: [
                     'help/contact',
                     'help/faq',
-                    'help/sudos',
                 ]
             },
         ],
@@ -319,7 +318,6 @@ zhSideBar = {
                 children: [
                     'help/contact',
                     'help/faq',
-                    'help/sudos',
                 ]
             },
         ],
