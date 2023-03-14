@@ -9,7 +9,7 @@ Before running Sealer in non-root mode, please make sure the following steps are
 You need to change the permissions of the `sshd_config` file before installing Sealer using sudo. You can do this by using the following command:
 
 ```bash
-sudo chmod 644 /etc/ssh/sshd_config
+sealer@cubmaster01$ sudo chmod 644 /etc/ssh/sshd_config
 ```
 
 This will fix the remote read permission issue.
@@ -29,7 +29,7 @@ This will allow the user named sealer to run commands as a superuser without ent
 To run the Sealer image, use the following command:
 
 ```bash
-$ sudo sealer run docker.io/sealerio/kubernetes:v1.22.15 --masters 10.0.0.245 --nodes 10.0.0.246 --nodes 10.0.0.247 --user sealer  --passwd  '1234$a'
+sealer@cubmaster01$ sudo sealer run docker.io/sealerio/kubernetes:v1.22.15 --masters 10.0.0.245 --nodes 10.0.0.246 --nodes 10.0.0.247 --user sealer  --passwd  '1234$a'
 ```
 
 Here, the `--masters` parameter specifies the IP addresses of the Kubernetes master nodes that Sealer will manage, the `--nodes` parameter specifies the IP addresses of the Kubernetes worker nodes that Sealer will manage, the `--user` parameter specifies the username that Sealer will use, and the `--passwd` parameter specifies the password that Sealer will use.
