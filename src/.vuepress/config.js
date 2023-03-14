@@ -60,6 +60,7 @@ enSideBar = {
                     'advanced/customize-cluster-image',
                     'advanced/use-sealer-image-offline',
                     'advanced/run-with-clusterfile',
+                    'advanced/sealer-run-rootless',
                 ]
             },
             {
