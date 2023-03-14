@@ -58,6 +58,8 @@ enSideBar = {
                 collapsable: true,
                 children: [
                     'advanced/customize-cluster-image',
+                    'advanced/use-sealer-image-offline',
+                    'advanced/run-with-clusterfile',
                 ]
             },
             {
