@@ -59,6 +59,8 @@ enSideBar = {
                 children: [
                     'advanced/customize-cluster-image',
                     'advanced/sealer-run-rootless',
+                    'advanced/use-sealer-image-offline',
+                    'advanced/run-with-clusterfile',
                 ]
             },
             {

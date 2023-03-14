@@ -1,12 +1,8 @@
 # Run sealer in non-root mode
 
-
-
 ## Prerequisites
 
 Before running Sealer in non-root mode, please make sure the following steps are satisfied:
-
-
 
 ### Check `sshd_config` permissions
 
@@ -18,8 +14,6 @@ $ sudo chmod 644 /etc/ssh/sshd_config
 
 This will fix the remote read permission issue.
 
-
-
 ### Check `sudoers` rules
 
 Before running Sealer in the cluster, you need to assign passwordless login permissions to the users on **all nodes**. You can edit the `/etc/sudoers` file to achieve this purpose. The file contains sudo user and group rules that allow specific users (like sealer) or groups to run commands as a superuser while executing the commands.
@@ -29,8 +23,6 @@ sealer ALL=(ALL) NOPASSWD: ALL
 ```
 
 This will allow the user named sealer to run commands as a superuser without entering a password.
-
-
 
 ## Run Sealer image
 
