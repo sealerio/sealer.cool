@@ -82,15 +82,12 @@ spec:
 ```
 
 Next, create a `Kubefile` with the following content:
-Next, create a `Kubefile` with the following content:
 
 ```shell
 FROM scratch
 APP nginx local://nginx.yaml
 LAUNCH ["nginx"]
 ```
-
-Finally, run the following command to build the app image:
 
 Finally, run the following command to build the app image:
 
@@ -111,8 +108,6 @@ You can check the pod by running the following command:
 ```bash
 kubectl get pod -A
 ```
-
-
 
 ## Push the app image to the registry
 
