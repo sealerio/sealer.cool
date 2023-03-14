@@ -18,6 +18,7 @@ sealer run docker.io/sealerio/kubernetes:v1.22.15 \
   --masters 192.168.0.2,192.168.0.3,192.168.0.4 \
   --nodes 192.168.0.5,192.168.0.6,192.168.0.7 --passwd xxx
 ```
+
 :::tip Password reminder
 The password cannot contain the `$` environment variable character, as [cobra](https://github.com/spf13/cobra/) cannot recognize it. You can run Sealer using one of the following methods: user `\$`、 `'1234$a'` OR `"1234\$a"`
 :::

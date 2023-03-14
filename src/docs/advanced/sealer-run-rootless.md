@@ -9,7 +9,7 @@ Before running Sealer in non-root mode, please make sure the following steps are
 You need to change the permissions of the `sshd_config` file before installing Sealer using sudo. You can do this by using the following command:
 
 ```bash
-$ sudo chmod 644 /etc/ssh/sshd_config
+sudo chmod 644 /etc/ssh/sshd_config
 ```
 
 This will fix the remote read permission issue.
