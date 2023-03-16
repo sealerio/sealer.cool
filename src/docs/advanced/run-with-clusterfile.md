@@ -9,7 +9,7 @@ see [clusterfile](../concept/clusterfile.md)
 Now sealer just support to run k0s cluster with default configuration.
 
 ```yaml
-apiVersion: sealer.cloud/v2
+apiVersion: sealer.io/v2
 kind: Cluster
 metadata:
   name: my-test-cluster
