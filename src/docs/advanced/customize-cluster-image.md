@@ -130,7 +130,7 @@ Examples: copy plugin config file to this directory.
 plugin config: shell.yaml:
 
 ```
-apiVersion: sealer.aliyun.com/v1alpha1
+apiVersion: sealer.io/v1
 kind: Plugin
 metadata:
   name: pre_init_host # Specify this plugin name,will dump in $rootfs/plugin dir.

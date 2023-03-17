@@ -104,7 +104,7 @@ type SubjectAltName struct {
 create 3 masters and a node using cluster image `docker.io/sealerio/kubernetes:v1.22.15`
 
 ```yaml
-apiVersion: sealer.cloud/v2
+apiVersion: sealer.io/v2
 kind: Cluster
 metadata:
   name: default-kubernetes-cluster
@@ -125,7 +125,7 @@ spec:
 the `cluster.spec.hosts.ssh`.
 
 ```yaml
-apiVersion: sealer.cloud/v2
+apiVersion: sealer.io/v2
 kind: Cluster
 metadata:
   name: default-kubernetes-cluster
@@ -151,7 +151,7 @@ spec:
 set `cluster.spec.hosts.labels`, `cluster.spec.hosts.roles` and `cluster.spec.hosts.taints` in Clusterfile.
 
 ```yaml
-apiVersion: sealer.cloud/v2
+apiVersion: sealer.io/v2
 kind: Cluster
 metadata:
   name: my-cluster
@@ -185,7 +185,7 @@ we can overwrite the boot command by set `cluster.spec.cmd` in Clusterfile, this
 launch cluster image.
 
 ```yaml
-apiVersion: sealer.cloud/v2
+apiVersion: sealer.io/v2
 kind: Cluster
 metadata:
   name: default-kubernetes-cluster
@@ -207,7 +207,7 @@ we can overwrite the boot apps by set `cluster.spec.appNames` in Clusterfile, if
 apps by default.
 
 ```yaml
-apiVersion: sealer.cloud/v2
+apiVersion: sealer.io/v2
 kind: Cluster
 metadata:
   name: default-kubernetes-cluster
@@ -252,7 +252,7 @@ set "PodCIDR=172.24.0.0/24","SvcCIDR=10.96.0.0/16" in `cluster.spec.env`, sealer
 file and create a new file named `kubeadm.yaml`,and will use the new one to init the cluster.
 
 ```yaml
-apiVersion: sealer.cloud/v2
+apiVersion: sealer.io/v2
 kind: Cluster
 metadata:
   name: my-cluster
@@ -282,7 +282,7 @@ cluster default storage device is "StorageDevice=/dev/vdc", while master node is
 use host env "StorageDevice=/dev/vde" for master node as their key is equal.
 
 ```yaml
-apiVersion: sealer.cloud/v2
+apiVersion: sealer.io/v2
 kind: Cluster
 metadata:
   name: my-cluster
@@ -331,7 +331,7 @@ type ConfigSpec struct {
 Append you config file into Clusterfile like this:
 
 ```yaml
-apiVersion: sealer.aliyun.com/v1alpha1
+apiVersion: sealer.io/v1
 kind: Config
 metadata:
   name: mysql-config
@@ -362,7 +362,7 @@ Examples:
 this will convert value to json, and then encoded it to base64 string.
 
 ```
-apiVersion: sealer.aliyun.com/v1alpha1
+apiVersion: sealer.io/v1
 kind: Config
 metadata:
   name: mysql-config
@@ -437,7 +437,7 @@ The following is a detailed introduction for plugin action.
 use `pre-init-host` to init each host`s disk.
 
 ```yaml
-apiVersion: sealer.aliyun.com/v1alpha1
+apiVersion: sealer.io/v1
 kind: Plugin
 metadata:
   name: pre_init_host
@@ -458,7 +458,7 @@ spec:
 use `post-install` to configure cluster storage class.
 
 ```yaml
-apiVersion: sealer.aliyun.com/v1alpha1
+apiVersion: sealer.io/v1
 kind: Plugin
 metadata:
   name: post_install
@@ -481,7 +481,7 @@ spec:
 use `upgrade` to upgrade cluster kubernetes version.
 
 ```yaml
-apiVersion: sealer.aliyun.com/v1alpha1
+apiVersion: sealer.io/v1
 kind: Plugin
 metadata:
   name: upgrade
