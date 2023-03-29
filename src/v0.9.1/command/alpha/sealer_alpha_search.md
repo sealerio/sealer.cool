@@ -1,27 +1,25 @@
-# sealer alpha mount
+# sealer alpha search
 
-mount cluster image
-
-## Synopsis
-
-mount the cluster image to '/var/lib/containers/storage/overlay' the directory and check whether the contents of the build image and rootfs are consistent in advance
+search Sealer Image in default registry
 
 ```
-sealer alpha mount [flags]
+sealer alpha search [flags]
 ```
 
 ## Examples
 
 ```
-  sealer alpha mount(show mount list)
-  sealer alpha mount my-image
-  sealer alpha mount imageID
+sealer alpha search <imageDomain>/<imageRepo>/<imageName> ...
+## default imageDomain: 'docker.io', default imageRepo: 'sealerio'
+ex.:
+  sealer alpha search kubernetes
+
 ```
 
 ## Options
 
 ```
-  -h, --help   help for mount
+  -h, --help   help for search
 ```
 
 ## Options inherited from parent commands
@@ -32,7 +30,7 @@ sealer alpha mount [flags]
   -d, --debug                      turn on debug mode
       --hide-path                  hide the log path
       --hide-time                  hide the log time
-      --log-to-file                write log message to disk (default true)
+      --log-to-file                write log message to disk
   -q, --quiet                      silence the usage when fail
       --remote-logger-url string   remote logger url, if not empty, will send log to this url
       --task-name string           task name which will embedded in the remote logger header, only valid when --remote-logger-url is set
@@ -40,4 +38,5 @@ sealer alpha mount [flags]
 
 ## SEE ALSO
 
-* [sealer alpha](sealer_alpha.md)	 - sealer experimental sub-commands
+* [sealer alpha](sealer_alpha.md)     - sealer experimental sub-commands
+

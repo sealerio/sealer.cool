@@ -14,7 +14,7 @@ This guide covers how you can quickly get started using Sealer.
 
 ```shell
 # run a kubernetes cluster
-sealer run docker.io/sealerio/kubernetes-arm64:v1-22-15-sealerio-2 \
+sealer run docker.io/sealerio/kubernetes:v1.22.15 \
   --masters 192.168.0.2,192.168.0.3,192.168.0.4 \
   --nodes 192.168.0.5,192.168.0.6,192.168.0.7 --passwd xxx
 ```
