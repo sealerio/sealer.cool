@@ -406,29 +406,32 @@ type PluginSpec struct {
 }
 ```
 
-1. for `PluginSpec.Type`: plugin type,currently only supported "SHELL".
-2. for `PluginSpec.Data`: plugin`s real data, sealer will use it to do actual action.
-3. for `PluginSpec.Scope`: plugin`s scope, it is usually the role name, support use '|' to specify multiple scopes.
-4. for `PluginSpec.Action`: phase of this plugin will run. below is the phase list we currently supported.
+* for `PluginSpec.Type`: plugin type,currently only supported "SHELL".
+* for `PluginSpec.Data`: plugin`s real data, sealer will use it to do actual action.
+* for `PluginSpec.Scope`: plugin`s scope, it is usually the role name, support use '|' to specify multiple scopes. if
+  not set, default is all hosts excluding cluster type plugins.
+* for `PluginSpec.Action`: phase of this plugin will run. if action is `host type`,will execute on  `PluginSpec.Scope`
+  specified, if it is `cluster type` , only execute plugin at master0. below is the phase list we currently supported.
 
 plugin will be executed by `PluginSpec.Name` in alphabetical order at the same stage.
 
-The following is a detailed introduction for plugin action.
+The following is a detailed introduction for plugin action.it is divided into 2 categories, one is the `host type`
+plugin and the other is the `cluster type` plugin.
 
-| action name | action scope | explanation |
-| :-----| ----: | :----: |
-| pre-init-host | cluster host | will run before init cluster host |
-| post-init-host | cluster host | will run after init cluster host  |
-| pre-clean-host | cluster host | will run before clean cluster host  |
-| post-clean-host | cluster host | will run after clean cluster host  |
-| pre-install | master0 | will run before install cluster |
-| post-install | master0 | will run after install cluster  |
-| pre-uninstall | master0 | will run before uninstall cluster |
-| post-uninstall | master0 | will run after uninstall cluster  |
-| pre-scaleup | master0 | will run before scaleup cluster |
-| post-scaleup | master0 | will run after scaleup cluster  |
-| upgrade-host | cluster host | will run before upgrade cluster  |
-| upgrade | master0 | will run for upgrading cluster  |
+| action name | action scope | category| explanation |
+| :-----| ----: | ----: |----: |
+| pre-init-host | all host |host type | will run before init cluster host |
+| post-init-host | all host | host type| will run after init cluster host  |
+| pre-clean-host | all host | host type| will run before clean cluster host  |
+| post-clean-host | all host | host type| will run after clean cluster host  |
+| pre-install | master0 | cluster type| will run before install cluster |
+| post-install | master0 |cluster type | will run after install cluster  |
+| pre-uninstall | master0 |cluster type | will run before uninstall cluster |
+| post-uninstall | master0 | cluster type| will run after uninstall cluster  |
+| pre-scaleup | master0 | cluster type| will run before scaleup cluster |
+| post-scaleup | master0 | cluster type| will run after scaleup cluster  |
+| upgrade-host | all host | host type| will run before upgrade cluster  |
+| upgrade | master0 | cluster type| will run for upgrading cluster  |
 
 ### Use cases
 
@@ -516,7 +519,7 @@ type ApplicationSpec struct {
   Configs []ApplicationConfig `json:"configs,omitempty"`
 }
 
-type ApplicationConfig struct {
+  type ApplicationConfig struct {
   // the AppName
   Name string `json:"name,omitempty"`
 
@@ -526,12 +529,12 @@ type ApplicationConfig struct {
   Files []AppFile `json:"files,omitempty"`
 }
 
-type Launch struct {
+  type Launch struct {
   // Cmds raw cmds support, not required, exclusive with app type.
   Cmds []string `json:"cmds,omitempty"`
 }
 
-type AppFile struct {
+  type AppFile struct {
   // Path represents the path to write the Values, required.
   Path string `json:"path,omitempty"`
 
@@ -706,7 +709,7 @@ spec:
         - 172.16.26.162
       roles:
         - master
-      ssh: {}
+      ssh: { }
   image: abc:v1
   ssh:
     passwd: xxxxxx
@@ -720,9 +723,9 @@ then we can apply this application config through `sealer apply`.
 for "mixedapp", overwrite data to "rediscert" file:
 
 ```yaml
-[root@iZbp1chh98quny8r8r71bhZ]# cat /var/lib/sealer/data/my-cluster/rootfs/application/apps/mixedapp/rediscert
-redis-user: root
-redis-passwd: xxx
+[ root@iZbp1chh98quny8r8r71bhZ]# cat /var/lib/sealer/data/my-cluster/rootfs/application/apps/mixedapp/rediscert
+  redis-user: root
+  redis-passwd: xxx
 ```
 
 for "yamlapp", will merge data to "merge.yaml" file:
@@ -730,13 +733,13 @@ for "yamlapp", will merge data to "merge.yaml" file:
 before:
 
 ```yaml
-[root@iZbp1chh98quny8r8r71bhZ]# cat merge.yaml
-apiVersion: v1
-data:
-  key1: myConfigMap1
-kind: ConfigMap
-metadata:
-  name: myConfigMap1
+[ root@iZbp1chh98quny8r8r71bhZ]# cat merge.yaml
+    apiVersion: v1
+    data:
+      key1: myConfigMap1
+    kind: ConfigMap
+    metadata:
+      name: myConfigMap1
 ---
 apiVersion: v1
 data:
@@ -749,22 +752,22 @@ metadata:
 after:
 
 ```yaml
-[root@iZbp1chh98quny8r8r71bhZ]# cat /var/lib/sealer/data/my-cluster/rootfs/application/apps/yamlapp/merge.yaml
-apiVersion: v1
-data:
-    key1: myConfigMap1
-    test-key: test-key
-kind: ConfigMap
-metadata:
-    name: myConfigMap1
-    namespace: test-namespace
+[ root@iZbp1chh98quny8r8r71bhZ]# cat /var/lib/sealer/data/my-cluster/rootfs/application/apps/yamlapp/merge.yaml
+    apiVersion: v1
+    data:
+      key1: myConfigMap1
+      test-key: test-key
+    kind: ConfigMap
+    metadata:
+      name: myConfigMap1
+      namespace: test-namespace
 ---
 apiVersion: v1
 data:
-    key2: myConfigMap2
-    test-key: test-key
+  key2: myConfigMap2
+  test-key: test-key
 kind: ConfigMap
 metadata:
-    name: myConfigMap2
-    namespace: test-namespace
+  name: myConfigMap2
+  namespace: test-namespace
 ```
