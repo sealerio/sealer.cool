@@ -34,7 +34,7 @@ delete all:
   -h, --help                 help for delete
   -m, --masters string       reduce Count or IPList to masters
   -n, --nodes string         reduce Count or IPList to nodes
-  -p, --prune                this flags is for delete all cluster rootfs, default is true (default true)
+  -p, --prune                this flags is for delete all cluster rootfs, default is false
 ```
 
 ## Options inherited from parent commands
@@ -58,4 +58,5 @@ delete all:
 * [sealer apply](sealer_apply.md)     - apply a Kubernetes cluster via specified Clusterfile
 * [sealer scale-up](sealer_scale-up.md)     - scale-up new master or worker node to specified cluster
 * [sealer run](sealer_run.md)     - start to run a cluster from a Sealer Image
+* [sealer rollback](sealer_rollback.md)     - rollback a Kubernetes cluster via specified Clusterfile
 * [sealer upgrade](sealer_upgrade.md)     - upgrade the kubernetes version of an existing cluster from a Sealer Image

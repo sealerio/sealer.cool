@@ -37,13 +37,14 @@ build multi-platform image:
       --build-arg strings               set custom build args
   -f, --file string                     Kubefile filepath (default "Kubefile")
   -h, --help                            help for build
+      --ignored-image-list pathname     pathname of ignored image list filepath, if set, sealer will read its contents and prevent downloading of the corresponding container image (default "filepath")
       --image-list pathname             pathname of imageList filepath, if set, sealer will read its content and download extra container (default "filepath")
       --image-list-with-auth pathname   pathname of imageListWithAuth.yaml filepath, if set, sealer will read its content and download extra container images to rootfs(not usually used)
-      --label strings                   add labels for image. Format like --label key=[value] (default [io.sealer.version=v0.9.0])
+      --label strings                   add labels for image. Format like --label key=[value] (default [io.sealer.version=v0.10.0])
       --no-cache                        do not use existing cached images for building. Build from the start with a new set of cached layers.
       --platform strings                set the target platform, --platform=linux/amd64 or --platform=linux/amd64/v7. Multi-platform will be like --platform=linux/amd64,linux/amd64/v7 (default [linux/amd64])
       --pull string                     pull policy. Allow for --pull, --pull=true, --pull=false, --pull=never, --pull=always, --pull=ifnewer (default "ifnewer")
-  -t, --tag string                      specify a name for Sealer Image
+  -t, --tag string                      specify a name for sealer image
       --type string                     specify the image type, --type=kube-installer, --type=app-installer, default is kube-installer (default "kube-installer")
 ```
 

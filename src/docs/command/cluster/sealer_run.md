@@ -29,10 +29,11 @@ run app image:
 
 ```
   -f, --Clusterfile string   Clusterfile path to run a Kubernetes cluster
-      --apps strings         override default AppNames of Sealer Image
-      --cmds strings         override default LaunchCmds of Sealer Image
+      --apps strings         override default AppNames of sealer image
+      --cmds strings         override default LaunchCmds of sealer image
   -e, --env strings          set custom environment variables
   -h, --help                 help for run
+      --ignore-cache         whether ignore cache when distribute sealer image, default is false.
   -m, --masters string       set count or IPList to masters
       --mode string          load images to the specified registry in advance (default "apply")
   -n, --nodes string         set count or IPList to nodes
@@ -64,4 +65,5 @@ run app image:
 * [sealer apply](sealer_apply.md)     - apply a Kubernetes cluster via specified Clusterfile
 * [sealer scale-up](sealer_scale-up.md)     - scale-up new master or worker node to specified cluster
 * [sealer run](sealer_run.md)     - start to run a cluster from a Sealer Image
+* [sealer rollback](sealer_rollback.md)     - rollback a Kubernetes cluster via specified Clusterfile
 * [sealer upgrade](sealer_upgrade.md)     - upgrade the kubernetes version of an existing cluster from a Sealer Image

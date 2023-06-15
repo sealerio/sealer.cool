@@ -21,8 +21,9 @@ sealer load [flags]
 ## Options
 
 ```
-  -h, --help           help for load
-  -i, --input string   Load image from file
+  -h, --help             help for load
+  -i, --input string     Load image from file
+      --tmp-dir string   set temporary directory when load image. if not set, use system`s temporary directory
 ```
 
 ## Options inherited from parent commands

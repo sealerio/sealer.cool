@@ -21,6 +21,7 @@ sealer pull [flags]
   -h, --help              help for pull
       --platform string   prefer OS/ARCH instead of the current operating system and architecture for choosing images (default "linux/amd64")
       --policy string     missing, always, ifnewer or never. (default "always")
+      --skip-tls-verify   default is requiring HTTPS and verify certificates when accessing the registry.
 ```
 
 ## Options inherited from parent commands
