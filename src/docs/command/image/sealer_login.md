@@ -19,7 +19,7 @@ sealer login [flags]
 ```
   -h, --help              help for login
   -p, --passwd string     password for login registry
-      --tls-verify        require HTTPS and verify certificates when accessing the registry. TLS verification cannot be used when talking to an insecure registry. (default true)
+      --skip-tls-verify   default is requiring require HTTPS and verify certificates when accessing the registry. TLS verification cannot be used when talking to an insecure registry.
   -u, --username string   user name for login registry
 ```
 

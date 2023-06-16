@@ -48,19 +48,19 @@ For example:
 
 + Using `APP` instruction to define a `mysql` app which contains files form the local chart dir `local://mysql/`.
 
-    `APP mysql local://mysql/`
+  `APP mysql local://mysql/`
 
 + Using `APP` instruction to define a `dashboard` app which contains [remote k8s resource file](https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml) and the remote file will be auto downloaded.
 
-    `APP dashboard https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml`
+  `APP dashboard https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml`
 
 + Using `APP` instruction to define a `dashboard` app which contains a local k8s resource file `recommended.yaml`.
 
-    `APP dashboard local://recommended.yaml`
+  `APP dashboard local://recommended.yaml`
 
 + Using `APP` instruction to define a `business` app which contains a local shell file `install.sh`.
 
-    `APP business local://install.sh`
+  `APP business local://install.sh`
 
 ## CNI instruction
 
@@ -231,3 +231,46 @@ USAGE：
 For example ,Using `KUBEVERSION` instruction to declare that the `Sealer Image` supports kubernetes version between 1.22 and 1.24.
 
 `KUBEVERSION 1.22 - 1.24`
+
+## ENV instruction
+
+The `ENV` instruction sets the environment variable `<key>` to the value `<value>`. This value will be in the
+environment for all subsequent instructions in the build stage and will also save to image spec as well for lately used,
+such as file rendering .
+
+> command format: ENV key=value
+
+USAGE：
+
+For example:
+
+Using `ENV` instruction to specify the global key pair for all apps
+
+```
+FROM scratch
+ENV globalKey=globalValue
+APP app1 local://app1
+APP app2 local://app2
+LAUNCH ["app1","app2"]
+```
+
+## APPENV instruction
+
+The `APPENV` instruction sets the environment variable `<key>` to the value `<value>`. This value will only be used to
+specified app, and used to do app file rendering.
+
+> command format: APPENV APP_NAME key1=value1 key2=value2
+
+USAGE：
+
+For example:
+
+Using `APPENV` instruction to specify the key pair for an app.
+
+```
+FROM scratch
+APP app1 local://app1
+APP app2 local://app2
+APPENV app1 key1=value1 key2=value2
+LAUNCH ["app1","app2"]
+```

@@ -22,10 +22,11 @@ save kubernetes:v1 image to kubernetes.tar file:
 ## Options
 
 ```
-      --compress        Compress tarball image layers when saving to a directory using the 'dir' transport. (default is same compression type as source)
-      --format string   Save image to oci-archive, oci-dir (directory with oci manifest type), docker-archive, docker-dir (directory with v2s2 manifest type) (default "oci-archive")
-  -h, --help            help for save
-  -o, --output string   Write image to a specified file
+      --compress         Compress tarball image layers when saving to a directory using the 'dir' transport. (default is same compression type as source)
+      --format string    Save image to oci-archive, oci-dir (directory with oci manifest type), docker-archive, docker-dir (directory with v2s2 manifest type) (default "oci-archive")
+  -h, --help             help for save
+  -o, --output string    Write image to a specified file
+      --tmp-dir string   set temporary directory when save image. if not set, use system`s temporary directory
 ```
 
 ## Options inherited from parent commands

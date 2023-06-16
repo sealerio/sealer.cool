@@ -17,10 +17,10 @@ sealer push [flags]
 ## Options
 
 ```
-      --all               also push the images in the list
+      --all               also push the images in the list (default true)
       --authfile string   path to store auth file after login. Accessing registry with this auth. (default "/root/.sealer/auth.json")
   -h, --help              help for push
-      --tls-verify        require HTTPS and verify certificates when accessing the registry. TLS verification cannot be used when talking to an insecure registry. (not work currently) (default true)
+      --skip-tls-verify   default is requiring HTTPS and verify certificates when accessing the registry.
 ```
 
 ## Options inherited from parent commands

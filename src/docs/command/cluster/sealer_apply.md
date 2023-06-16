@@ -25,8 +25,17 @@ sealer apply [flags]
 ```
   -f, --Clusterfile string   Clusterfile path to apply a Kubernetes cluster
   -m, --applyMode string     load images to the specified registry in advance (default "apply")
+  -e, --env strings          set custom environment variables
       --force                force to delete the specified cluster if set true
   -h, --help                 help for apply
+      --ignore-cache         whether ignore cache when distribute sealer image, default is false.
+      --masters string       set count or IPList to masters
+      --nodes string         set count or IPList to nodes
+  -p, --passwd string        set cloud provider or baremetal server password
+      --pk string            set baremetal server private key (default "/root/.ssh/id_rsa")
+      --pk-passwd string     set baremetal server private key password
+      --port uint16          set the sshd service port number for the server (default port: 22) (default 22)
+  -u, --user string          set baremetal server username (default "root")
 ```
 
 ## Options inherited from parent commands
@@ -50,4 +59,5 @@ sealer apply [flags]
 * [sealer apply](sealer_apply.md)     - apply a Kubernetes cluster via specified Clusterfile
 * [sealer scale-up](sealer_scale-up.md)     - scale-up new master or worker node to specified cluster
 * [sealer run](sealer_run.md)     - start to run a cluster from a Sealer Image
+* [sealer rollback](sealer_rollback.md)     - rollback a Kubernetes cluster via specified Clusterfile
 * [sealer upgrade](sealer_upgrade.md)     - upgrade the kubernetes version of an existing cluster from a Sealer Image

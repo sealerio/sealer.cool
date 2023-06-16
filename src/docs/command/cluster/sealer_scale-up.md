@@ -26,6 +26,7 @@ scale-up cluster:
 ```
   -e, --env strings        set custom environment variables
   -h, --help               help for scale-up
+      --ignore-cache       whether ignore cache when distribute sealer image, default is false.
   -m, --masters string     set Count or IPList to masters
   -n, --nodes string       set Count or IPList to nodes
   -p, --passwd string      set cloud provider or baremetal server password
@@ -56,4 +57,5 @@ scale-up cluster:
 * [sealer apply](sealer_apply.md)     - apply a Kubernetes cluster via specified Clusterfile
 * [sealer scale-up](sealer_scale-up.md)     - scale-up new master or worker node to specified cluster
 * [sealer run](sealer_run.md)     - start to run a cluster from a Sealer Image
+* [sealer rollback](sealer_rollback.md)     - rollback a Kubernetes cluster via specified Clusterfile
 * [sealer upgrade](sealer_upgrade.md)     - upgrade the kubernetes version of an existing cluster from a Sealer Image

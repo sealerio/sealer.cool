@@ -523,6 +523,12 @@ type ApplicationSpec struct {
   // the AppName
   Name string `json:"name,omitempty"`
 
+  // Env is a set of key value pair.
+  // it is app level, only this app will be aware of its existence,
+  // it is used to render app files, or as an environment variable for app startup and deletion commands
+  // it takes precedence over ApplicationSpec.Env.
+  Env []string `json:"env,omitempty"`
+
   // app Launch customization
   Launch *Launch `json:"launch,omitempty"`
 
@@ -538,7 +544,9 @@ type ApplicationSpec struct {
   // Path represents the path to write the Values, required.
   Path string `json:"path,omitempty"`
 
-  // Enumeration value is "merge", "overwrite".
+  // Enumeration value is "merge", "overwrite". default value is "overwrite".
+// OverWriteStrategy: this will overwrite the FilePath with the Data.
+// MergeStrategy: this will merge the FilePath with the Data, and only yaml files format are supported
   Strategy Strategy `json:"strategy,omitempty"`
 
   // Data real app launch need.
@@ -619,7 +627,7 @@ spec:
 
 this will only launch two apps with its default launch cmds defined from kubefile: "app1","app2"
 
-#### overwrite app launch apps
+#### overwrite app launch cmds
 
 ```yaml
 apiVersion: sealer.io/v2
@@ -662,11 +670,64 @@ this will only launch two apps ("app1","app2"):
 * for "app1": use its default launch cmds defined from kubefile.
 * for "app2": overwrite its default launch cmds as "kubectl apply -f app2.yaml".
 
-#### overwrite app files
+#### overwrite app files with config data
 
 currently, we support below strategy for app modification.
 
 * "overwrite": overwrite strategy will overwrite the FilePath with the Data.
+
+example:
+
+```yaml
+apiVersion: sealer.io/v2
+kind: Application
+metadata:
+  name: my-apps
+spec:
+  launchApps:
+    - redis
+  configs:
+    - name: redis
+      files:
+        - path: rediscert
+          strategy: "overwrite"
+          data: |
+            redis-user: root
+            redis-passwd: xxx
+---
+apiVersion: sealer.io/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  hosts:
+    - ips:
+        - 172.16.26.162
+      roles:
+        - master
+      ssh: { }
+  image: abc:v1
+  ssh:
+    passwd: xxxxxx
+    pk: /root/.ssh/id_rsa
+    port: "22"
+    user: root
+```
+
+then we can apply this application config through `sealer apply`.
+
+for "redis"app ,will overwrite data to "rediscert" file:
+
+```yaml
+[ root@iZbp1chh98quny8r8r71bhZ]# cat /var/lib/sealer/data/my-cluster/rootfs/application/apps/redis/rediscert
+    redis-user: root
+      redis-passwd: xxx
+```
+
+#### merge app files with config data
+
+currently, we support below strategy for app modification.
+
 * "merge": merge strategy will merge the FilePath with the Data, and only yaml files format are supported.
 
 example:
@@ -678,17 +739,8 @@ metadata:
   name: my-apps
 spec:
   launchApps:
-    - nginx
     - yamlapp
-    - mixedapp
   configs:
-    - name: mixedapp
-      files:
-        - path: rediscert
-          strategy: "overwrite"
-          data: |
-            redis-user: root
-            redis-passwd: xxx
     - name: yamlapp
       files:
         - path: merge.yaml
@@ -720,14 +772,6 @@ spec:
 
 then we can apply this application config through `sealer apply`.
 
-for "mixedapp", overwrite data to "rediscert" file:
-
-```yaml
-[ root@iZbp1chh98quny8r8r71bhZ]# cat /var/lib/sealer/data/my-cluster/rootfs/application/apps/mixedapp/rediscert
-  redis-user: root
-  redis-passwd: xxx
-```
-
 for "yamlapp", will merge data to "merge.yaml" file:
 
 before:
@@ -735,11 +779,11 @@ before:
 ```yaml
 [ root@iZbp1chh98quny8r8r71bhZ]# cat merge.yaml
     apiVersion: v1
-    data:
-      key1: myConfigMap1
-    kind: ConfigMap
-    metadata:
-      name: myConfigMap1
+      data:
+        key1: myConfigMap1
+      kind: ConfigMap
+      metadata:
+        name: myConfigMap1
 ---
 apiVersion: v1
 data:
@@ -754,13 +798,13 @@ after:
 ```yaml
 [ root@iZbp1chh98quny8r8r71bhZ]# cat /var/lib/sealer/data/my-cluster/rootfs/application/apps/yamlapp/merge.yaml
     apiVersion: v1
-    data:
-      key1: myConfigMap1
-      test-key: test-key
-    kind: ConfigMap
-    metadata:
-      name: myConfigMap1
-      namespace: test-namespace
+      data:
+        key1: myConfigMap1
+        test-key: test-key
+      kind: ConfigMap
+      metadata:
+        name: myConfigMap1
+        namespace: test-namespace
 ---
 apiVersion: v1
 data:
@@ -770,4 +814,110 @@ kind: ConfigMap
 metadata:
   name: myConfigMap2
   namespace: test-namespace
+```
+
+#### render app files with config env
+
+using config env to do app file rendering, support Golang HTML template rendering syntax.
+
+example:
+
+set Deployment `ImageName` as a variable in template file `nginx.yaml.tmpl`.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: { { .ImageName } }
+          ports:
+            - containerPort: 80
+```
+
+below is the build context:
+
+```shell
+├── Kubefile
+└── nginx
+    └── nginx.yaml.tmpl
+```
+
+Kubefile:
+
+```shell
+FROM scratch
+APP app1 local://nginx
+APPCMDS app1 ["kubectl apply -f nginx.yaml"]
+LAUNCH ["app1"]
+```
+
+using `ImageName="docker.io/bitnami/nginx:latest"`as app1 env config at clusterfile, this will render `nginx.yaml.tmpl`
+to `nginx.yaml` and change `ImageName` to its value after apply.
+
+```yaml
+kind: Application
+metadata:
+  name: my-apps
+spec:
+  launchApps:
+    - app1
+  configs:
+    - name: app1
+      env:
+        - ImageName="docker.io/bitnami/nginx:latest"
+---
+apiVersion: sealer.io/v2
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  hosts:
+    - ips:
+        - 172.16.26.162
+      roles:
+        - master
+      ssh: { }
+  image: my-nginx:v1
+  ssh:
+    passwd: xxxxxx
+    pk: /root/.ssh/id_rsa
+    port: "22"
+    user: root
+```
+
+we can check the result :
+
+```shell
+cat /var/lib/sealer/data/my-cluster/rootfs/application/apps/app1/nginx.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: "docker.io/bitnami/nginx:latest"
+        ports:
+        - containerPort: 80
 ```
