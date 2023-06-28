@@ -244,8 +244,8 @@ kubernetesVersion: v1.22.15
 controlPlaneEndpoint: "apiserver.cluster.local:6443"
 imageRepository: sea.hub:5000
 networking:
-  podSubnet: { { .PodCIDR } }
-  serviceSubnet: { { .SvcCIDR } }
+  podSubnet: {{ .PodCIDR }}
+  serviceSubnet: {{ .SvcCIDR }}
 ```
 
 set "PodCIDR=172.24.0.0/24","SvcCIDR=10.96.0.0/16" in `cluster.spec.env`, sealer will render the "kubeadm.yaml.tmpl"
@@ -841,7 +841,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: { { .ImageName } }
+          image: {{ .ImageName }}
           ports:
             - containerPort: 80
 ```
