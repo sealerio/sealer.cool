@@ -31,9 +31,6 @@ type ClusterSpec struct {
 	HostAliases []HostAlias `json:"hostAliases,omitempty"`
 	// Registry field contains configurations about local registry and remote registry.
 	Registry Registry `json:"registry,omitempty"`
-    // DataRoot set sealer rootfs directory path.
-	// if not set, default value is "/var/lib/sealer/data"
-	DataRoot string `json:"dataRoot,omitempty"`
 }
 
 type Host struct {
@@ -302,34 +299,6 @@ spec:
         - StorageDevice=/dev/vde
     - ips: [ 192.168.0.3 ]
       roles: [ node ]
-```
-
-#### Changing default rootfs data path in Clusterfile
-
-When running a sealer image, sealer will mount the image content to rootfs data path. In some case, user want to change
-this data path due to some reason, and then user could change default rootfs data path in Clusterfile via this
-field `v2.cluster.spec.DataRoot`. if not set, sealer will use default rootfs data path `/var/lib/sealer/data` as default
-data directory.
-
-```yaml
-apiVersion: sealer.io/v2
-kind: Cluster
-metadata:
-  name: my-cluster
-spec:
-  dataRoot: /tmp/kaka
-  hosts:
-    - ips:
-        - 172.25.146.174
-      roles:
-        - master
-      ssh: { }
-  image: docker.io/sealerio/kubernetes:v1-22-15-sealerio-2
-  ssh:
-    passwd: xxxxx
-    pk: /root/.ssh/id_rsa
-    port: "22"
-    user: root
 ```
 
 ## Config API

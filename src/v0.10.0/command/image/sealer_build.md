@@ -37,7 +37,6 @@ build multi-platform image:
       --build-arg strings               set custom build args
   -f, --file string                     Kubefile filepath (default "Kubefile")
   -h, --help                            help for build
-      --build-mode                      whether to download container image during the build process. default is `all`.
       --ignored-image-list pathname     pathname of ignored image list filepath, if set, sealer will read its contents and prevent downloading of the corresponding container image (default "filepath")
       --image-list pathname             pathname of imageList filepath, if set, sealer will read its content and download extra container (default "filepath")
       --image-list-with-auth pathname   pathname of imageListWithAuth.yaml filepath, if set, sealer will read its content and download extra container images to rootfs(not usually used)
