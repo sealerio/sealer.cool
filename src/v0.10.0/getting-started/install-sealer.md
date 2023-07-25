@@ -16,13 +16,13 @@ and installed.
 1. Download sealer binary
 
 ```shell
-wget https://github.com/sealerio/sealer/releases/download/v0.11.0/sealer-v0.11.0-linux-amd64.tar.gz
+wget https://github.com/sealerio/sealer/releases/download/v0.10.0/sealer-v0.10.0-linux-amd64.tar.gz
 ```
 
 2. Unpack it
 
 ```shell
-tar zxvf sealer-v0.11.0-linux-amd64.tar.gz
+tar zxvf sealer-v0.10.0-linux-amd64.tar.gz
 ```
 
 3. Find the sealer binary in the unpacked directory, and move it to its desired destination
